@@ -1,0 +1,50 @@
+# =========================
+# Python / Django
+# =========================
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+db.sqlite3
+local_settings.py
+media/
+staticfiles/
+.env
+.env.*
+*.pot
+*.pyc
+.DS_Store
+
+# =========================
+# Vite / React
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+frontend/.env.*
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# React build and cache
+*.local
+*.cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+vite.config.local.*
+
+# =========================
+# System & IDE
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+Thumbs.db
+.DS_Store
