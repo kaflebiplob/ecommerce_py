@@ -5,7 +5,7 @@ from products.models import Product
 # Create your models here.
 
 
-class Product(models.Model):
+class Order(models.Model):
     STATUS_CHOICES=(
         ('pending','Pending'),
         ('processing',"Processing"),
