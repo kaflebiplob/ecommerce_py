@@ -9,15 +9,27 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from products.models import Product
 
+
+# The default serializer for this ViewSet.
+# Since our main operations deal with the full Cart, it's better to use CartSerializer
+    
 class CartViewSet(viewsets.ModelViewSet):
     serializer_class = CartItemSerializer
     permission_classes = [IsAuthenticated]
+    
+    # This method tells Django Rest Framework which queryset to use.
+    # For carts, we filter only the cart(s) that belong to the logged-in user.
+    
     def get_queryset(self):
         return Cart.objects.filter(user = self.request.user)
+    
+    # This is used internally to get the user's cart object.
+    # If the user does not have a cart yet, it will create one.
     def get_object(self):
         cart,_ = Cart.objects.get_or_create(user= self.request.user)
         return cart
     
+    # When you hit GET /api/cart/, this method is called to return the cart with items, totals, etc
     def list(self,request):
         cart = self.get_object()
         serializer = CartSerializer(cart)
