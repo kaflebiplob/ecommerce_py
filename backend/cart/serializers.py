@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import cartItem, Cart
+from .models import CartItem, Cart
 from products.models import Product
 from products.serializers import ProductSerializer
 
@@ -10,10 +10,10 @@ class CartItemSerializer(serializers.ModelSerializer):
         queryset = Product.objects.all(),source='product',write_only = True
     )
     class Meta:
-        model = cartItem
+        model = CartItem
         fields = ['id','product_id','product','quantity']
 
-class CartSerializers(serializers.ModelSerializer):
+class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True,read_only=True)
     total_items = serializers.ReadOnlyField()
     total_price = serializers.ReadOnlyField()

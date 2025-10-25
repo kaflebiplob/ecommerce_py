@@ -20,10 +20,12 @@ from rest_framework.routers import DefaultRouter
 from products.views import CategoryViewSet,ProductViewSet
 from django.conf import settings
 from django.conf.urls.static import static
+from cart.views import CartViewSet
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet,basename='categories')
 router.register(r'products', ProductViewSet,basename='products')
+router.register(r'cart',CartViewSet,basename='cart')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
