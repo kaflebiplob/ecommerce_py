@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from cart.views import CartViewSet
 from orders.views import OrderViewset
 from reviews.views import ReviewViewSet
+from support.views import SupportTicketViewSet
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet,basename='categories')
@@ -30,6 +31,7 @@ router.register(r'products', ProductViewSet,basename='products')
 router.register(r'cart',CartViewSet,basename='cart')
 router.register(r"orders",OrderViewset,basename='orders')
 router.register(r"reviews",ReviewViewSet, basename='reviews')
+router.register(r"support",SupportTicketViewSet, basename='support')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
