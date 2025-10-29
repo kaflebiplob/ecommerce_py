@@ -24,6 +24,7 @@ from cart.views import CartViewSet
 from orders.views import OrderViewset
 from reviews.views import ReviewViewSet
 from support.views import SupportTicketViewSet
+from address.views import AddressViewSet
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet,basename='categories')
@@ -32,6 +33,7 @@ router.register(r'cart',CartViewSet,basename='cart')
 router.register(r"orders",OrderViewset,basename='orders')
 router.register(r"reviews",ReviewViewSet, basename='reviews')
 router.register(r"support",SupportTicketViewSet, basename='support')
+router.register(r"address",AddressViewSet, basename='address')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

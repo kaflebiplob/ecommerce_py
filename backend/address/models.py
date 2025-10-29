@@ -13,7 +13,7 @@ class Address(models.Model):
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=20, blank=True, null=True)
-    id_default = models.BooleanField(default=False)
+    is_default = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
     
