@@ -19,9 +19,9 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
         return SupporTicket.objects.filter(user=user)
     
     def perform_create(self, serializer):
-        return serializer.save(self.request.user)
+        serializer.save(user=self.request.user)
     
-    @action(detail =True, methods='post')
+    @action(detail =True, methods=['post'], url_path='add_message')
     def add_message(self, request, pk=None):
         ticket = self.get_object()
         message_text = request.data.get('message')
