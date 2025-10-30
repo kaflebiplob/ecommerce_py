@@ -25,6 +25,7 @@ from orders.views import OrderViewset
 from reviews.views import ReviewViewSet
 from support.views import SupportTicketViewSet
 from address.views import AddressViewSet
+from wishlist.views import WishlistViewSet
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet,basename='categories')
@@ -34,6 +35,7 @@ router.register(r"orders",OrderViewset,basename='orders')
 router.register(r"reviews",ReviewViewSet, basename='reviews')
 router.register(r"support",SupportTicketViewSet, basename='support')
 router.register(r"address",AddressViewSet, basename='address')
+router.register(r"wishlist",WishlistViewSet, basename='wishlist')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
