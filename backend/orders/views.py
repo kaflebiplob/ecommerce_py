@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from cart.models import Cart, CartItem
 from rest_framework.decorators import action
+from utils.email_utils import send_custom_email
 
 # Create your views here.
 
@@ -40,6 +41,17 @@ class OrderViewset(viewsets.ModelViewSet):
         
         cart.items.all().delete()
         return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['post'], url_path='test_email')
+    def test_email(self,request):
+        user = request.user
+        subject = 'Order Confirmation Of My Store'
+        message = f"Hello {user.username}, Your order has been placed successfully."
+        send_custom_email(subject, message, [user.email])
+        return Response({"message": f"Email sent to {user.email}"})
+    
+    
+
         
     
     
