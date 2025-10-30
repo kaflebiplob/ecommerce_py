@@ -26,8 +26,10 @@ from reviews.views import ReviewViewSet
 from support.views import SupportTicketViewSet
 from address.views import AddressViewSet
 from wishlist.views import WishlistViewSet
+from accounts.views import UserListView
 
 router = DefaultRouter()
+router.register(r"users",UserListView,basename='users')
 router.register(r'categories', CategoryViewSet,basename='categories')
 router.register(r'products', ProductViewSet,basename='products')
 router.register(r'cart',CartViewSet,basename='cart')
