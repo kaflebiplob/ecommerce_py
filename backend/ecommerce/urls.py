@@ -28,6 +28,7 @@ from address.views import AddressViewSet
 from wishlist.views import WishlistViewSet
 from accounts.views import UserListView
 from payments.views import PaymentViewSet
+from discount.views import DiscountViewSet
 
 router = DefaultRouter()
 router.register(r"users",UserListView,basename='users')
@@ -40,6 +41,7 @@ router.register(r"support",SupportTicketViewSet, basename='support')
 router.register(r"address",AddressViewSet, basename='address')
 router.register(r"wishlist",WishlistViewSet, basename='wishlist')
 router.register(r"payments",PaymentViewSet,basename='payments')
+router.register(r"discounts",DiscountViewSet, basename='discount')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
