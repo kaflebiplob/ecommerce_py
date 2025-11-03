@@ -7,7 +7,8 @@ class Discount(models.Model):
     valid_from = models.DateField()
     valid_to = models.DateField()
     active = models.BooleanField(default=True)
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)    
     
     def __str__(self):
         return f"{self.product.name} - {self.discount_percent}%"
