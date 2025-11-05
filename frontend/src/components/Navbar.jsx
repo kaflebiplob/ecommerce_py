@@ -1,31 +1,35 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about-us" },
     { name: "Shop", path: "/products" },
     { name: "Wishlist", path: "/wishlist" },
     { name: "Orders", path: "/orders" },
   ];
+
   return (
-    <nav className="bg-white sticky shadow top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center p-4">
-        <Link to="/" className="text-2xl font-bold text-blue-600">
-          Logo
+    <nav className="bg-blue-600 text-white shadow-md sticky top-0 z-50">
+      <div className="container mx-auto flex justify-between items-center px-6 py-4">
+        <Link
+          to="/"
+          className="text-2xl font-bold tracking-wide hover:text-blue-200 transition"
+        >
+          MyShop
         </Link>
 
-        <ul className="hidden md:flex space-x-6 text-gray-700">
+        <ul className="hidden md:flex space-x-6 text-sm font-medium">
           {navItems.map((item) => (
-            <li key={item.name} className="">
+            <li key={item.name}>
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  isActive ? "text-blue-600" : "hover:text-blue-600"
+                  isActive
+                    ? "text-white border-b-2 border-white pb-1"
+                    : "hover:text-blue-200"
                 }
               >
                 {item.name}
@@ -33,22 +37,24 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
+
         <div className="flex items-center space-x-4">
           <Link
             to="/cart"
-            className="relative inline-flex items-center text-gray-600  hover:text-blue-600"
+            className="relative text-white hover:text-blue-200 transition"
           >
-            <i className="fa-solid fa-cart-shoppingtext-lx"></i>
-            <span className="absolute -top-2 right-2 bg-blue-600 text-white text-xs px-1 rounded-full">
+            <i className="fa-solid fa-cart-shopping text-xl"></i>
+            <span className="absolute -top-2 -right-3 bg-white text-blue-700 text-xs font-bold px-1.5 py-0.5 rounded-full">
               0
             </span>
           </Link>
+
           {user ? (
             <div className="flex items-center space-x-3">
-              <span className="text-gray-700">Hi, {user.username}</span>
+              <span className="text-sm">Hi, <b>{user.username}</b></span>
               <button
                 onClick={logout}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                className="bg-white text-blue-600 px-3 py-1 rounded-full text-sm font-semibold hover:bg-gray-100 transition"
               >
                 Logout
               </button>
@@ -56,7 +62,7 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+              className="bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-semibold hover:bg-gray-100 transition"
             >
               Login
             </Link>
