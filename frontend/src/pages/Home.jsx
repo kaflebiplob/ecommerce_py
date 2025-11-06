@@ -62,7 +62,7 @@ const Home = () => {
                 className="bg-white rounded-2xl shadow hover:shadow-lg transition p-4 flex flex-col"
                 key={product.id}
               >
-                <Link to={`/products/${product.id}`}>
+                <Link to={`/product/${product.id}`}>
                   <img
                     src={product.image}
                     alt={product.name}
@@ -78,9 +78,9 @@ const Home = () => {
                     <span className="text-blue-600 font-bold text-lg">
                       ₹{product.price}
                     </span>
-                    <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                    <Link to="/cart" className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
                       Add to Cart
-                    </button>
+                    </Link>
                   </div>
                 </Link>
               </div>
