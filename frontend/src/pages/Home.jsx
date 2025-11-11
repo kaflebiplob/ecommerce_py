@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
-import Loader from "../components/Loader"; 
+import Loader from "../components/Loader";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -12,55 +12,59 @@ const Home = () => {
       try {
         const response = await api.get("products/");
         const data = response.data;
+
         console.log("API Base URL:", import.meta.env.VITE_API_URL);
+        console.log("API Response:", data);
 
-        console.log("Api response",response.data);
-
-        if(Array.isArray(data)){
+        if (Array.isArray(data)) {
           setProducts(data);
-        }else{
+        } else {
           setProducts([]);
         }
       } catch (error) {
-        console.error("Failed to fetch Products", error);
-        // setLoading(true);
+        console.error("Failed to fetch products:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProducts();
-    
   }, []);
+
   if (loading) return <Loader />;
+
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <section className="bg-linear-to-r from-blue-600 to-indigo-600 text-white py-20 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Welcome to<span className="text-yellow-300">MyShop</span>
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white py-24 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+          Welcome to <span className="text-emerald-500">MyShop</span>
         </h1>
-        <p className="text-lg md:text-xl mb-8">
-          Discover the latest products with amazing deals with fast delivery.
+        <p className="text-gray-300 text-lg md:text-xl mb-8">
+          Discover modern products, smart deals, and fast delivery.
         </p>
         <Link
           to="/products"
-          className="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-yellow-300 transition"
+          className="bg-emerald-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-emerald-500 transition"
         >
-          {" "}
           Shop Now
         </Link>
       </section>
-      <section className="container mx-auto py-16px-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">
+
+      {/* Featured Products Section */}
+      <section className="container mx-auto px-6 py-16">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center text-gray-900 mb-10">
           Featured Products
         </h2>
+
         {products.length === 0 ? (
-          <p className=" text-center text-gray-600">No Products Available</p>
+          <p className="text-center text-gray-600">No Products Available</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {products.slice(0, 8).map((product) => (
               <div
-                className="bg-white rounded-2xl shadow hover:shadow-lg transition p-4 flex flex-col"
                 key={product.id}
+                className="bg-gray-50 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all p-4 flex flex-col"
               >
                 <Link to={`/product/${product.id}`}>
                   <img
@@ -68,21 +72,24 @@ const Home = () => {
                     alt={product.name}
                     className="w-full h-52 object-cover rounded-xl mb-4"
                   />
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-gray-900 truncate">
                     {product.name}
                   </h3>
                   <p className="text-gray-600 mt-2 text-sm line-clamp-2">
                     {product.description}
                   </p>
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-blue-600 font-bold text-lg">
-                      ₹{product.price}
-                    </span>
-                    <Link to="/cart" className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
-                      Add to Cart
-                    </Link>
-                  </div>
                 </Link>
+                <div className="flex justify-between items-center mt-4">
+                  <span className="text-emerald-600 font-semibold text-lg">
+                    ₹{product.price}
+                  </span>
+                  <Link
+                    to="/cart"
+                    className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 transition"
+                  >
+                    Add to Cart
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

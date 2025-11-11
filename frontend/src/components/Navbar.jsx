@@ -12,11 +12,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-blue-600 text-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
+    <nav className="bg-white border-b border-gray-200 text-gray-800 sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto flex justify-between items-center px-6 py-3">
         <Link
           to="/"
-          className="text-2xl font-bold tracking-wide hover:text-blue-200 transition"
+          className="text-2xl font-semibold tracking-tight text-gray-900 hover:text-emerald-600 transition"
         >
           MyShop
         </Link>
@@ -28,8 +28,8 @@ const Navbar = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-white border-b-2 border-white pb-1"
-                    : "hover:text-blue-200"
+                    ? "text-emerald-600 border-b-2 border-emerald-600 pb-1"
+                    : "text-gray-700 hover:text-black transition"
                 }
               >
                 {item.name}
@@ -41,20 +41,22 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           <Link
             to="/cart"
-            className="relative text-white hover:text-blue-200 transition"
+            className="relative text-gray-700 hover:text-emerald-600 transition"
           >
             <i className="fa-solid fa-cart-shopping text-xl"></i>
-            <span className="absolute -top-2 -right-3 bg-white text-blue-700 text-xs font-bold px-1.5 py-0.5 rounded-full">
+            <span className="absolute -top-2 -right-3 bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
               0
             </span>
           </Link>
 
           {user ? (
             <div className="flex items-center space-x-3">
-              <span className="text-sm">Hi, <b>{user.username}</b></span>
+              <span className="text-sm text-gray-700">
+                Hi, <b>{user.username}</b>
+              </span>
               <button
                 onClick={logout}
-                className="bg-white text-blue-600 px-3 py-1 rounded-full text-sm font-semibold hover:bg-gray-100 transition"
+                className="bg-black text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-gray-800 transition"
               >
                 Logout
               </button>
@@ -62,7 +64,7 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-semibold hover:bg-gray-100 transition"
+              className="bg-black text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-gray-800 transition"
             >
               Login
             </Link>
