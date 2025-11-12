@@ -20,7 +20,7 @@ const Wishlist = () => {
       </h2>
       {wishlist.length === 0 ? (
         <p className="text-gray-600 text-center">
-          Your wishlist is empty.{" "}
+          Your Wishlist Is Empty.{" "}
           <Link to="/products" className="text-emerald-500 hover:underline">
             Browse Products
           </Link>
