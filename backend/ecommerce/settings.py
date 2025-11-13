@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wishlist',
     'payments',
     'discount',
+    'adminpanel',
 ]
 
 MIDDLEWARE = [
