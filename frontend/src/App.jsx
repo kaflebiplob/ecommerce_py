@@ -13,6 +13,8 @@ import Register from './pages/Register'
 import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
+import OrderSuccess from './pages/OrderSuccess'
+import OrderFailure from './pages/OrderFailure'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +31,8 @@ function App() {
       <Route path='/wishlist' element={<Wishlist />} />
       <Route path='/cart' element={<Cart  />} />
       <Route path='/checkout' element={<Checkout />} />
+      <Route path='/order-success' element={<OrderSuccess />} />
+      <Route path='/order-failure' element={<OrderFailure />} />
     </Routes>
     <Footer/>
   </BrowserRouter>
