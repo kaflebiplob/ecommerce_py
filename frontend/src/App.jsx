@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -27,6 +28,7 @@ function App() {
       <Route path='/register' element={<Register />} />
       <Route path='/wishlist' element={<Wishlist />} />
       <Route path='/cart' element={<Cart  />} />
+      <Route path='/checkout' element={<Checkout />} />
     </Routes>
     <Footer/>
   </BrowserRouter>
