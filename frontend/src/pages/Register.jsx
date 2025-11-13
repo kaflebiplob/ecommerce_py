@@ -52,6 +52,7 @@ const Register = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Username
+            <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -60,13 +61,13 @@ const Register = () => {
               value={formData.username}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-              
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
+              <span className="text-red-600">*</span>
             </label>
             <input
               type="email"
@@ -82,6 +83,7 @@ const Register = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
+              <span className="text-red-600">*</span>
             </label>
             <input
               type="password"

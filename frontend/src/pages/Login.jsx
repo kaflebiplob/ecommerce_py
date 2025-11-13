@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!formData.username || !formData.password) {
-      setMessage(" Please fill out both fields.");
+      setError(" Please fill out both fields.");
       return;
     }
     const result = await login(formData.username, formData.password);
@@ -25,8 +25,8 @@ const Login = () => {
       setMessage("Login successful! Redirecting...");
       setTimeout(() => navigate("/"), 1500);
     } else {
-      setMessage(` ${result.message}`);
-      setError("Invalid username or password. Please try again.");
+      // setMessage(` ${result.message}`);
+      setError(`Invalid username or password. Please try again.`);
     }
   };
 
@@ -47,6 +47,7 @@ const Login = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Username
+              <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -61,6 +62,7 @@ const Login = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
+              <span className="text-red-600">*</span>
             </label>
             <input
               type="password"
