@@ -3,7 +3,7 @@ from rest_framework import viewsets,permissions
 from products.models import Product, Category
 from orders.models import Order
 from django.contrib.auth.models import User
-from .serializers import ProductAdminSerializer, OrderAdminSerializer
+from .serializers import ProductAdminSerializer, OrderAdminSerializer, CategoryAdminSerializer
 # Create your views here.
 
 class IsAdminUser(permissions.BasePermission):
@@ -14,6 +14,11 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductAdminSerializer
     permission_classes = [IsAdminUser]
+    
+class CategoryAdminViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_classes = CategoryAdminSerializer
+    parser_classes = [IsAdminUser]
     
     
 class OrderAdminViewSet(viewsets.ModelViewSet):
