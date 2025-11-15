@@ -23,8 +23,8 @@ class ProductAdminViewSet(viewsets.ModelViewSet):
     
 class CategoryAdminViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    serializer_classes = CategoryAdminSerializer
-    parser_classes = [IsAdminUser]
+    serializer_class = CategoryAdminSerializer
+    permission_classes = [IsAdminUser]
     
     
 class OrderAdminViewSet(viewsets.ModelViewSet):

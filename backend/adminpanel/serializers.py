@@ -59,5 +59,5 @@ class PaymentAdminSerializer(serializers.ModelSerializer):
 class UserAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['is','username','email','is_superuser', 'is_staff','is_active']
+        fields = ['id','username','email','is_superuser', 'is_staff','is_active']
         
