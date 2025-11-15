@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
 import Loader from "../components/Loader";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -34,6 +36,9 @@ const Home = () => {
   if (loading) return <Loader />;
 
   return (
+    <>
+    <Navbar/>
+
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white py-24 text-center">
@@ -96,6 +101,8 @@ const Home = () => {
         )}
       </section>
     </div>
+    <Footer/>
+  </>
   );
 };
 
