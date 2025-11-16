@@ -15,7 +15,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
 
-  const [rating, setRating] = useState(0); // Default rating until product loads
+  const [rating, setRating] = useState(0); 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -23,7 +23,6 @@ const ProductDetail = () => {
         const response = await api.get(`products/${id}/`);
         setProduct(response.data);
 
-        // Set initial rating from product
         setRating(response.data.rating || 0);
       } catch (error) {
         console.error("Failed to fetch the product", error);
@@ -55,7 +54,6 @@ const ProductDetail = () => {
       <div className="bg-gray-50 py-16 px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-          {/* IMAGE + WISHLIST */}
           <div className="flex justify-center relative">
             <img
               src={product.image}
@@ -75,13 +73,11 @@ const ProductDetail = () => {
             </button>
           </div>
 
-          {/* PRODUCT INFO */}
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-3">
               {product.name}
             </h1>
 
-            {/* ⭐ RATING SYSTEM */}
             <div className="flex items-center gap-1 mb-4">
               {[...Array(5)].map((_, i) => (
                 <FiStar
@@ -104,7 +100,6 @@ const ProductDetail = () => {
               ₹{product.price}
             </p>
 
-            {/* QUANTITY */}
             <div className="flex items-center gap-3 mb-6">
               <button
                 className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
