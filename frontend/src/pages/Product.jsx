@@ -3,6 +3,7 @@ import api from "../api/api";
 import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const Product = () => {
   const [products, setProducts] = useState([]);

@@ -16,11 +16,12 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import OrderFailure from "./pages/OrderFailure";
 import AdminLayout from "./admin/AdminLayout";
-import AdminProduct from "./admin/AdminProduct";
+// import AdminProduct from "./admin/AdminProduct";
 import AdminOrder from "./admin/AdminOrder";
 import Review from "./admin/Review";
 import Discount from "./admin/Discount";
 import Payment from "./admin/Payment";
+import AdminProduct from "./admin/products/AdminProduct";
 
 function App() {
   const [count, setCount] = useState(0);
