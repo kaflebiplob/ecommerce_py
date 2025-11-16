@@ -21,13 +21,16 @@ import AdminOrder from "./admin/AdminOrder";
 import Review from "./admin/Review";
 import Discount from "./admin/Discount";
 import Payment from "./admin/Payment";
+import { Toaster } from "react-hot-toast";
 import AdminProduct from "./admin/products/AdminProduct";
+import ProductForm from "./admin/products/ProductForm";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <BrowserRouter>
+    <Toaster position="top-right" reverseOrder={false} />
       {/* <Navbar/> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -42,6 +45,8 @@ function App() {
         <Route path="/order-failure" element={<OrderFailure />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<AdminProduct />} />
+          <Route path="products/create" element={<ProductForm />} />
+          <Route path="products/edit/:id" element={<ProductForm />}/>
           <Route path="orders" element={<AdminOrder />} />
           <Route path="reviews" element={<Review />} />
           <Route path="discounts" element={<Discount />} />
