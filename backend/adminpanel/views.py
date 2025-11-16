@@ -17,28 +17,28 @@ class IsAdminUser(permissions.BasePermission):
         return bool(request.user and (request.user.is_staff or request.user.is_superuser))
     
 class ProductAdminViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductAdminSerializer
     permission_classes = [IsAdminUser]
     
 class CategoryAdminViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('-id')
     serializer_class = CategoryAdminSerializer
     permission_classes = [IsAdminUser]
     
     
 class OrderAdminViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('-id')
     serializer_class = OrderAdminSerializer
     permission_classes= [IsAdminUser]
     
 class AddressAdminViewSet(viewsets.ModelViewSet):
-    queryset = Address.objects.all()
+    queryset = Address.objects.all().order_by('-id')
     serializer_class = AddressAdminSerializer
     permission_classes = [IsAdminUser]
     
 class DiscountAdminViewSet(viewsets.ModelViewSet):
-    queryset = Discount.objects.all()
+    queryset = Discount.objects.all().order_by('-id')
     serializer_class = DiscountAdminSerializer
     permission_classes = [IsAdminUser]
     
@@ -48,7 +48,7 @@ class PaymentAdminViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAdminUser]
     
 class UserAdminViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-id')
     serializer_class = UserAdminSerializer
     permission_classes = [IsAdminUser]
     
@@ -58,12 +58,12 @@ class CartAdminViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     
 class ReviewAdminViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by('-id')
     serializer_class = ReviewAdminSerializer
     permission_classes = [IsAdminUser]
     
 class SupportAdminViewSet(viewsets.ModelViewSet):
-    queryset = SupporTicket.objects.all()
+    queryset = SupporTicket.objects.all().order_by('-id')
     serializer_class = SupportAdminSerializer
     permission_classes = [IsAdminUser]
     
