@@ -35,6 +35,27 @@ class DiscountAdminSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
     
+    def validate(self, data):
+        product = data.get("product")
+        active = data.get("active", True)
+
+        # If it's updating, exclude the current discount from check
+        discount_id = self.instance.id if self.instance else None
+
+        if active:
+            exists = Discount.objects.filter(
+                product=product,
+                active=True
+            ).exclude(id=discount_id).exists()
+
+            if exists:
+                raise serializers.ValidationError(
+                    {"active": "An active discount already exists for this product. Deactivate it first."}
+                )
+
+        return data
+        
+    
 class SupportAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = SupporTicket
