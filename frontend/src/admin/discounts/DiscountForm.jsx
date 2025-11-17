@@ -8,7 +8,7 @@ const DiscountForm = () => {
   const navigate = useNavigate();
   const [product, setProducts] = useState([]);
   const [formData, setFormData] = useState({
-    product: "",
+    product_id: "",
     discount_percent: "",
     valid_from: "",
     valid_to: "",
@@ -25,8 +25,15 @@ const DiscountForm = () => {
 
   const loadDiscount = async () => {
     try {
-      const res = await api.post(`admin/discounts/${id}/`);
-      setFormData(res.data);
+      const res = await api.get(`/admin/discounts/${id}/`);
+      //   setFormData(res.data);
+      setFormData({
+        product_id: res.data.product.id,
+        discount_percent: res.data.discount_percent,
+        valid_from: res.data.valid_from,
+        valid_to: res.data.valid_to,
+        active: res.data.active,
+      });
     } catch (err) {
       toast.error("faled to load discunts", err);
       console.error(err);
@@ -41,12 +48,14 @@ const DiscountForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Sending Form Data:", formData);
+
     try {
       if (id) {
-        await api.post(`admin/discounts/${id}`, formData);
+        await api.put(`/admin/discounts/${id}/`, formData);
         toast.success("Discount Updated Succesfully");
       } else {
-        await api.post("admin/discounts/", formData);
+        await api.post("/admin/discounts/", formData);
         toast.success("Discount Created Succesfully!!");
       }
       navigate("/admin/discounts");
@@ -59,7 +68,9 @@ const DiscountForm = () => {
       //     active: true,
       //   });
     } catch (err) {
-      toast.error("failed to create the discount", err);
+      const message = err.response?.data?.error || "Failed to process discount";
+
+      toast.error(message);
       console.error("failed", err);
     }
   };
@@ -82,8 +93,8 @@ const DiscountForm = () => {
               Product
             </label>
             <select
-              name="product"
-              value={formData.product}
+              name="product_id"
+              value={formData.product_id}
               onChange={handleChange}
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               id=""
@@ -133,18 +144,27 @@ const DiscountForm = () => {
             />
           </div>
           <div className="flex items-center gap-4">
-            <label htmlFor="" className="font-medium text-gray-700">
-              Active:
+            <label className="inline-flex items-center cursor-pointer mt-1">
+              Status:
+              <input
+                type="checkbox"
+                name="active"
+                checked={formData.active}
+                onChange={(e) =>
+                  setFormData({ ...formData, active: e.target.checked })
+                }
+                className="sr-only peer"
+              />
+              <div
+                className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 
+       rounded-full peer peer-checked:bg-emerald-600 relative transition"
+              >
+                <div
+                  className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full 
+        transition peer-checked:translate-x-5"
+                ></div>
+              </div>
             </label>
-            <input
-              type="checkbox"
-              checked={formData.active}
-              name="active"
-              onChange={(e) =>
-                setFormData({ ...formData, active: e.target.checked })
-              }
-              className="mt-1 p-2 rounded-lg w-5 h-4"
-            />
           </div>
         </div>
         <div className="flex items-center gap-4 ">
