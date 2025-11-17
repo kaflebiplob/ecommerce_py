@@ -94,7 +94,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="p-6 font-[Poppins] text-md">
+    <div className="p-6 font-[monospace] text-md">
       <h2 className="text-2xl font-semibold mb-4">
         {isEdit ? "Edit Product" : "Create Product"}
       </h2>

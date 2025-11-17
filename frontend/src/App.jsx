@@ -46,8 +46,8 @@ function App() {
         <Route path="/order-failure" element={<OrderFailure />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<AdminProduct />} />
-          <Route path="products/create" element={<ProductForm />} />
-          <Route path="products/edit/:id" element={<ProductForm />}/>
+          <Route path="product/create" element={<ProductForm />} />
+          <Route path="product/edit/:id" element={<ProductForm />}/>
           <Route path="orders" element={<AdminOrder />} />
           <Route path="reviews" element={<Review />} />
           <Route path="discounts" element={<Discount />} />

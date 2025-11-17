@@ -67,7 +67,7 @@ const AdminProduct = () => {
         <h2 className="text-3xl font-semibold text-gray-800">Products</h2>
 
         <Link
-          to="/admin/products/create"
+          to="/admin/product/create"
           className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
         >
           + Add Product
@@ -114,7 +114,7 @@ const AdminProduct = () => {
 
                  
                   <Link
-                    to={`/admin/products/edit/${p.id}`}
+                    to={`/admin/product/edit/${p.id}`}
                     className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                   >
                     Edit
