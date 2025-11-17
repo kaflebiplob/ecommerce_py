@@ -8,6 +8,7 @@ from cart.models import Cart
 from reviews.models import Review
 from payments.models import Payment
 from django.contrib.auth.models import User
+from products.serializers import ProductSerializer
 
 class ProductAdminSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,10 +31,23 @@ class AddressAdminSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class DiscountAdminSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(),
+        source="product",
+        write_only=True
+    )
     class Meta:
         model = Discount
-        fields = '__all__'
-        
+        fields = [
+            "id",
+            "product",     
+            "product_id",   
+            "discount_percent",
+            "valid_from",
+            "valid_to",
+            "active",
+        ]        
     
     def validate(self, data):
         product = data.get("product")
