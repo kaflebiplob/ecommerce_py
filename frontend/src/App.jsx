@@ -19,11 +19,12 @@ import AdminLayout from "./admin/AdminLayout";
 // import AdminProduct from "./admin/AdminProduct";
 import AdminOrder from "./admin/AdminOrder";
 import Review from "./admin/Review";
-import Discount from "./admin/Discount";
 import Payment from "./admin/Payment";
 import { Toaster } from "react-hot-toast";
 import AdminProduct from "./admin/products/AdminProduct";
 import ProductForm from "./admin/products/ProductForm";
+import Discount from "./admin/discounts/Discount";
+import DiscountForm from "./admin/discounts/DiscountForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -50,6 +51,8 @@ function App() {
           <Route path="orders" element={<AdminOrder />} />
           <Route path="reviews" element={<Review />} />
           <Route path="discounts" element={<Discount />} />
+          <Route path="discount/create" element={<DiscountForm />}/>
+          <Route path="discount/edit/:id" element={<DiscountForm />} />
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>
