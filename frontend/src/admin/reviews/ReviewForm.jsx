@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const ReviewForm = () => {
   const [product, setProduct] = useState([]);
@@ -13,6 +13,7 @@ const ReviewForm = () => {
     comment: "",
   });
   const navigate = useNavigate();
+  const { id } = useParams();
   const loadProducts = async () => {
     try {
       const res = await api.get("/admin/products/");
@@ -26,12 +27,24 @@ const ReviewForm = () => {
     const res = await api.get("/admin/users/");
     setUser(res.data);
   };
+
+  const loadReview = async () => {
+    try {
+      const res = await api.get(`/admin/reviews/${id}`);
+      setFormData(res.data);
+    } catch (error) {
+      console.error("failed to load review", error);
+      toast.error("failed!!");
+    }
+  };
   useEffect(() => {
     loadProducts();
     loadUsers();
-  }, []);
+    if (id) {
+      loadReview();
+    }
+  }, [id]);
   const handleChange = (e) => {
-    e.preventDefault();
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -40,17 +53,24 @@ const ReviewForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/admin/reviews/", formData);
-      toast.success("Review Created Succesfully");
-      navigate('/admin/reviews');
+      if (id) {
+        await api.put(`/admin/reviews/${id}/`, formData);
+        toast.success("Succesfully Updated Review");
+      } else {
+        await api.post("/admin/reviews/", formData);
+        toast.success("Review Created Succesfully");
+      }
+      navigate("/admin/reviews");
     } catch (error) {
-      toast.error("Failed to create te review");
-      console.error("Failed to create review", error);
+      toast.error("Failed to process review");
+      console.error("Failed to process review", error);
     }
   };
   return (
     <div className="mx-auto p-5 bg-white rounded">
-      <h2 className="text-2xl font-semibold mb-4">Create Review</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        {id ? "Edit Review" : "Create review"}
+      </h2>
       <form
         action=""
         onSubmit={handleSubmit}
@@ -65,6 +85,7 @@ const ReviewForm = () => {
               name="product"
               id=""
               onChange={handleChange}
+              value={formData.product}
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value="">Select Product</option>
@@ -82,6 +103,7 @@ const ReviewForm = () => {
             <select
               name="user"
               onChange={handleChange}
+              value={formData.user}
               id=""
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 "
             >
@@ -100,6 +122,7 @@ const ReviewForm = () => {
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               name="rating"
               onChange={handleChange}
+              value={formData.rating}
             />
           </div>
         </div>
@@ -111,6 +134,7 @@ const ReviewForm = () => {
             name="comment"
             id=""
             onChange={handleChange}
+            value={formData.comment}
             rows={5}
             cols={5}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -121,7 +145,7 @@ const ReviewForm = () => {
             type="submit"
             className="bg-emerald-500 text-white hover:bg-emerald-700 transition text-md font-medium py-2 px-4 rounded-lg"
           >
-            Submit
+            {id ? "Update" : "Create"}
           </button>
           <div className="bg-red-500 text-white px-4  hover:bg-red-700 transition text-md font-medium py-2 rounded-lg">
             <Link to="/admin/reviews">Cancel</Link>
