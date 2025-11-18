@@ -7,8 +7,8 @@ const ReviewForm = () => {
   const [product, setProduct] = useState([]);
   const [user, setUser] = useState([]);
   const [formData, setFormData] = useState({
-    product: "",
-    user: "",
+    product_id: "",
+    user_id: "",
     rating: "",
     comment: "",
   });
@@ -24,14 +24,24 @@ const ReviewForm = () => {
     }
   };
   const loadUsers = async () => {
-    const res = await api.get("/admin/users/");
-    setUser(res.data);
+    try {
+      const res = await api.get("/admin/users/");
+      setUser(res.data);
+    } catch (error) {
+      console.error("Failed tp load user", error);
+      toast.error("failed to load user");
+    }
   };
 
   const loadReview = async () => {
     try {
-      const res = await api.get(`/admin/reviews/${id}`);
-      setFormData(res.data);
+      const res = await api.get(`/admin/reviews/${id}/`);
+      setFormData({
+        product_id: res.data.product?.id || res.data.product,
+        user_id: res.data.user?.id || res.data.user_id,
+        rating: res.data.rating,
+        comment: res.data.comment,
+      });
     } catch (error) {
       console.error("failed to load review", error);
       toast.error("failed!!");
@@ -82,10 +92,10 @@ const ReviewForm = () => {
               Product
             </label>
             <select
-              name="product"
+              name="product_id"
               id=""
               onChange={handleChange}
-              value={formData.product}
+              value={formData.product_id}
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value="">Select Product</option>
@@ -101,9 +111,9 @@ const ReviewForm = () => {
               User
             </label>
             <select
-              name="user"
+              name="user_id"
               onChange={handleChange}
-              value={formData.user}
+              value={formData.user_id}
               id=""
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 "
             >
