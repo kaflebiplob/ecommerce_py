@@ -76,9 +76,18 @@ class SupportAdminSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReviewAdminSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset = Product.objects.all(), source="product",write_only=True
+    )
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), source="user", write_only=False
+    )
+  
     class Meta:
-        model = Review
-        fields = '__all__'
+        model = Review  
+        fields =['id', 'user','user_id' ,'product', 'product_id', 'rating', 'comment', 'created_at']
 
 class CartAdminSerializer(serializers.ModelSerializer):
     class Meta:

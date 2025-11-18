@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Review
 from products.models import Product
 from products.serializers import ProductSerializer
+from django.contrib.auth.models import User
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
@@ -9,7 +10,6 @@ class ReviewSerializer(serializers.ModelSerializer):
     product_id = serializers.PrimaryKeyRelatedField(
         queryset = Product.objects.all(), source="product",write_only=True
     )
-    
     class Meta:
         model = Review
-        fields =['id', 'user', 'product', 'product_id', 'rating', 'comment', 'created_at']
+        fields =['id', 'user','product', 'product_id', 'rating', 'comment', 'created_at']
