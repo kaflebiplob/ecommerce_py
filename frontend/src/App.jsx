@@ -26,6 +26,7 @@ import Discount from "./admin/discounts/Discount";
 import DiscountForm from "./admin/discounts/DiscountForm";
 import Review from "./admin/reviews/Review";
 import ReviewForm from "./admin/reviews/ReviewForm";
+import Support from "./admin/supports/Support";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -56,6 +57,7 @@ function App() {
           <Route path="discounts" element={<Discount />} />
           <Route path="discount/create" element={<DiscountForm />}/>
           <Route path="discount/edit/:id" element={<DiscountForm />} />
+          <Route path="support-ticket" element={<Support/>}/>
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>

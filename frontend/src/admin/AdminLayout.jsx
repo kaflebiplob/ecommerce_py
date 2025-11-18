@@ -39,6 +39,9 @@ const AdminLayout = () => {
               Payments
             </Link>
           </li>
+          <li>
+            <Link to="support-ticket" className="block hover:text-white">Support Ticket</Link>
+          </li>
         </ul>
       </div>
 
