@@ -78,7 +78,7 @@ const DiscountForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   return (
-    <div className="nax-w-xl mx-auto p-5 bg-white  rounded">
+    <div className="mx-auto p-5 bg-white  rounded">
       <h2 className="text-2xl font-semibold mb-4">
         {id ? "Edit Discount" : "Create Discount"}
       </h2>
