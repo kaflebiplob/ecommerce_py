@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 
 const AdminProduct = () => {
   const [products, setProducts] = useState([]);
+  const mounted = useRef(false);
 
   const loadProducts = async () => {
     try {
@@ -58,7 +59,10 @@ const AdminProduct = () => {
   };
 
   useEffect(() => {
-    loadProducts();
+    if (!mounted.current) {
+      loadProducts();
+      mounted.current = true;
+    }
   }, []);
 
   return (
@@ -89,46 +93,57 @@ const AdminProduct = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {products.map((p, index) => (
-                <tr
-                  key={p.id}
-                  className={`border-t border-gray-200 hover:bg-gray-50 transition ${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  }`}
-                >
-                  <td className="p-4 text-center font-medium">{p.id}</td>
-
-                  <td className="p-4 text-center flex justify-center">
-                    <img
-                      src={p.image}
-                      alt="product"
-                      className="w-14 h-14 object-cover rounded"
-                    />
-                  </td>
-
-                  <td className="p-4 text-center">{p.name}</td>
-                  <td className="p-4 text-center">Rs. {p.price}</td>
-                  <td className="p-4 text-center">{p.stock}</td>
-
-                  <td className="p-4 gap-3">
-                    <div className=" flex justify-center items-center gap-3">
-                      <Link
-                        to={`/admin/product/edit/${p.id}`}
-                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                      >
-                        Edit
-                      </Link>
-
-                      <button
-                        onClick={() => deleteProducts(p.id)}
-                        className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                      >
-                        Delete
-                      </button>
-                    </div>
+              {products.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center p-6 text-gray-700 text-lg"
+                  >
+                    No Products Found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                products.map((p, index) => (
+                  <tr
+                    key={p.id}
+                    className={`border-t border-gray-200 hover:bg-gray-50 transition ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
+                  >
+                    <td className="p-4 text-center font-medium">{p.id}</td>
+
+                    <td className="p-4 text-center flex justify-center">
+                      <img
+                        src={p.image}
+                        alt="product"
+                        className="w-14 h-14 object-cover rounded"
+                      />
+                    </td>
+
+                    <td className="p-4 text-center">{p.name}</td>
+                    <td className="p-4 text-center">Rs. {p.price}</td>
+                    <td className="p-4 text-center">{p.stock}</td>
+
+                    <td className="p-4 gap-3">
+                      <div className=" flex justify-center items-center gap-3">
+                        <Link
+                          to={`/admin/product/edit/${p.id}`}
+                          className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                        >
+                          Edit
+                        </Link>
+
+                        <button
+                          onClick={() => deleteProducts(p.id)}
+                          className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

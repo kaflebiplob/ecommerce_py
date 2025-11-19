@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 
 const Support = () => {
   const [ticket, setTicket] = useState([]);
+  const mounted = useRef(false);
   const loadTicket = async () => {
     try {
       const res = await api.get("/admin/support/");
@@ -34,7 +35,10 @@ const Support = () => {
     }
   };
   useEffect(() => {
-    loadTicket();
+    if (!mounted.current) {
+      loadTicket();
+      mounted.current = true;
+    }
   }, []);
   return (
     <div className="p-6">
@@ -68,7 +72,7 @@ const Support = () => {
                 <tr>
                   <td
                     colSpan="6"
-                    className="text-center p-6 text-gray-500 text-lg"
+                    className="text-center p-6 text-gray-700 text-lg"
                   >
                     No Tickets Found
                   </td>

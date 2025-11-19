@@ -94,68 +94,79 @@ const User = () => {
           </thead>
 
           <tbody className="text-gray-800">
-            {users.map((user, index) => (
-              <tr
-                key={user.id}
-                className={`border-t border-gray-200 hover:bg-gray-50 transition ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
-              >
-                <td className="p-4 text-center font-medium">{index + 1}</td>
-
-                <td className="p-4 text-center font-medium">
-                  {user.username || "—"}
-                </td>
-
-                <td className="p-4 text-center">{user.email}</td>
-                <td className="p-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-white text-sm ${
-                      user.is_superuser ? "bg-emerald-600" : "bg-gray-500"
-                    }`}
-                  >
-                    {user.is_superuser ? "Yes" : "No"}
-                  </span>
-                </td>
-                <td className="p-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-white text-sm ${
-                      user.is_staff ? "bg-emerald-600" : "bg-gray-500"
-                    }`}
-                  >
-                    {user.is_staff ? "Yes" : "No"}
-                  </span>
-                </td>
-
-                <td className="p-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-white text-sm ${
-                      user.active ? "bg-emerald-600" : "bg-gray-500"
-                    }`}
-                  >
-                    {user.active ? "Active" : "Inactive"}
-                  </span>
-                </td>
-
-                <td className="p-4">
-                  <div className="flex justify-center gap-3">
-                    <Link
-                      to={`/admin/user/edit/${user.id}`}
-                      className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    >
-                      Edit
-                    </Link>
-
-                    <button
-                      onClick={() => confirmDelete(user.id)}
-                      className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                    >
-                      Delete
-                    </button>
-                  </div>
+            {users.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="text-center p-6 text-gray-700 text-lg"
+                >
+                  No Users Found
                 </td>
               </tr>
-            ))}
+            ) : (
+              users.map((user, index) => (
+                <tr
+                  key={user.id}
+                  className={`border-t border-gray-200 hover:bg-gray-50 transition ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
+                >
+                  <td className="p-4 text-center font-medium">{index + 1}</td>
+
+                  <td className="p-4 text-center font-medium">
+                    {user.username || "—"}
+                  </td>
+
+                  <td className="p-4 text-center">{user.email}</td>
+                  <td className="p-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-white text-sm ${
+                        user.is_superuser ? "bg-emerald-600" : "bg-gray-500"
+                      }`}
+                    >
+                      {user.is_superuser ? "Yes" : "No"}
+                    </span>
+                  </td>
+                  <td className="p-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-white text-sm ${
+                        user.is_staff ? "bg-emerald-600" : "bg-gray-500"
+                      }`}
+                    >
+                      {user.is_staff ? "Yes" : "No"}
+                    </span>
+                  </td>
+
+                  <td className="p-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-white text-sm ${
+                        user.active ? "bg-emerald-600" : "bg-gray-500"
+                      }`}
+                    >
+                      {user.active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+
+                  <td className="p-4">
+                    <div className="flex justify-center gap-3">
+                      <Link
+                        to={`/admin/user/edit/${user.id}`}
+                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                      >
+                        Edit
+                      </Link>
+
+                      <button
+                        onClick={() => confirmDelete(user.id)}
+                        className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

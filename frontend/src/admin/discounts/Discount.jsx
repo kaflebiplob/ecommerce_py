@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 
 const Discount = () => {
   const [discount, setDiscount] = useState([]);
+  const mounted = useRef(false);
 
   const loadDiscounts = async () => {
     try {
@@ -55,7 +56,10 @@ const Discount = () => {
   };
 
   useEffect(() => {
-    loadDiscounts();
+    if (!mounted.current) {
+      loadDiscounts();
+      mounted.current = true;
+    }
   }, []);
 
   return (
@@ -86,52 +90,63 @@ const Discount = () => {
           </thead>
 
           <tbody className="text-gray-800">
-            {discount.map((d, index) => (
-              <tr
-                key={d.id}
-                className={`border-t border-gray-200 hover:bg-gray-50 transition ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
-              >
-                <td className="p-4 text-center font-medium">{index+1}</td>
-
-                <td className="p-4 text-center font-medium">
-                  {d.product?.name || "—"}
-                </td>
-
-                <td className="p-4 text-center">{d.discount_percent}%</td>
-                <td className="p-4 text-center">{d.valid_from}</td>
-                <td className="p-4 text-center">{d.valid_to}</td>
-
-                <td className="p-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-white text-sm ${
-                      d.active ? "bg-emerald-600" : "bg-gray-500"
-                    }`}
-                  >
-                    {d.active ? "Active" : "Inactive"}
-                  </span>
-                </td>
-
-                <td className="p-4">
-                  <div className="flex justify-center gap-3">
-                    <Link
-                      to={`/admin/discount/edit/${d.id}`}
-                      className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    >
-                      Edit
-                    </Link>
-
-                    <button
-                      onClick={() => deleteDiscount(d.id)}
-                      className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                    >
-                      Delete
-                    </button>
-                  </div>
+            {discount.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="text-center p-6 text-gray-700 text-lg"
+                >
+                  No Discounts Found
                 </td>
               </tr>
-            ))}
+            ) : (
+              discount.map((d, index) => (
+                <tr
+                  key={d.id}
+                  className={`border-t border-gray-200 hover:bg-gray-50 transition ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
+                >
+                  <td className="p-4 text-center font-medium">{index + 1}</td>
+
+                  <td className="p-4 text-center font-medium">
+                    {d.product?.name || "—"}
+                  </td>
+
+                  <td className="p-4 text-center">{d.discount_percent}%</td>
+                  <td className="p-4 text-center">{d.valid_from}</td>
+                  <td className="p-4 text-center">{d.valid_to}</td>
+
+                  <td className="p-4 text-center">
+                    <span
+                      className={`px-3 py-1 rounded-full text-white text-sm ${
+                        d.active ? "bg-emerald-600" : "bg-gray-500"
+                      }`}
+                    >
+                      {d.active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+
+                  <td className="p-4">
+                    <div className="flex justify-center gap-3">
+                      <Link
+                        to={`/admin/discount/edit/${d.id}`}
+                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                      >
+                        Edit
+                      </Link>
+
+                      <button
+                        onClick={() => deleteDiscount(d.id)}
+                        className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

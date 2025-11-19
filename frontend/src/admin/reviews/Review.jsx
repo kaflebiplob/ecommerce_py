@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);
+  const mounted = useRef(false);
   const loadReviews = async () => {
-    const res = await api.get("/admin/reviews/");
-    setReviews(res.data);
+    try {
+      const res = await api.get("/admin/reviews/");
+      setReviews(res.data);
+    } catch (error) {
+      toast.error("Failed to load reviews");
+      console.log(error);
+    }
   };
   const deleteReview = async (id) => {
     if (!window.confirm("Are you sure you want to delete this review?")) {
@@ -24,7 +30,10 @@ const Review = () => {
     }
   };
   useEffect(() => {
-    loadReviews();
+    if (!mounted.current) {
+      loadReviews();
+      mounted.current = true;
+    }
   }, []);
   return (
     <div className="p-6">
@@ -54,42 +63,53 @@ const Review = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {reviews.map((d, index) => (
-                <tr
-                  key={d.id}
-                  className={`border-t border-gray-200 hover:bg-gray-50 transition ${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  }`}
-                >
-                  <td className="p-4 text-center font-medium">{index + 1}</td>
-
-                  <td className="p-4 text-center font-medium">
-                    {d.product?.name || "—"}
-                  </td>
-
-                  <td className="p-4 text-center">{d.user || "—"}</td>
-                  <td className="p-4 text-center">{d.rating}</td>
-                  <td className="p-4 text-center">{d.comment}</td>
-
-                  <td className="p-4">
-                    <div className="flex justify-center gap-3">
-                      <Link
-                        to={`/admin/review/edit/${d.id}`}
-                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                      >
-                        Edit
-                      </Link>
-
-                      <button
-                        onClick={() => deleteReview(d.id)}
-                        className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                      >
-                        Delete
-                      </button>
-                    </div>
+              {reviews.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center p-6 text-gray-700 text-lg"
+                  >
+                    No Reviews Found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                reviews.map((d, index) => (
+                  <tr
+                    key={d.id}
+                    className={`border-t border-gray-200 hover:bg-gray-50 transition ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
+                  >
+                    <td className="p-4 text-center font-medium">{index + 1}</td>
+
+                    <td className="p-4 text-center font-medium">
+                      {d.product?.name || "—"}
+                    </td>
+
+                    <td className="p-4 text-center">{d.user || "—"}</td>
+                    <td className="p-4 text-center">{d.rating}</td>
+                    <td className="p-4 text-center">{d.comment}</td>
+
+                    <td className="p-4">
+                      <div className="flex justify-center gap-3">
+                        <Link
+                          to={`/admin/review/edit/${d.id}`}
+                          className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                        >
+                          Edit
+                        </Link>
+
+                        <button
+                          onClick={() => deleteReview(d.id)}
+                          className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
