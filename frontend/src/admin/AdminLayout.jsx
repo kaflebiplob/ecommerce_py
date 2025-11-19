@@ -7,8 +7,8 @@ const AdminLayout = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="hidden md:block w-[220px] bg-gray-900 text-white p-6 shadow-lg">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      <div className="hidden md:block w-[220px] bg-gray-900 text-white p-6 shadow-lg h-full">
         <h2 className="text-xl font-semibold border-b border-gray-700 pb-3">
           <Link to="/">Admin Panel</Link>
         </h2>
@@ -34,51 +34,9 @@ const AdminLayout = () => {
               Discounts
             </Link>
           </li>
-          <li>
-            <Link to="payments" className="block hover:text-white">
-              Payments
-            </Link>
-          </li>
-          <li>
-            <Link to="support-ticket" className="block hover:text-white">Support Ticket</Link>
-          </li>
-        </ul>
-      </div>
-
-      {/*  Mobile Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-full w-[220px] bg-gray-900 text-white p-6 shadow-lg z-50 transform 
-        ${
-          open ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 lg:hidden`}
-      >
-        <h2 className="text-xl font-semibold border-b border-gray-700 pb-3 flex justify-between">
-          <Link to="/">Admin Panel</Link>
-          <button onClick={() => setOpen(false)}>✖</button>
-        </h2>
-
-        <ul
-          className="mt-6 space-y-4 text-gray-300"
-          onClick={() => setOpen(false)}
-        >
-          <li>
-            <Link to="products" className="block hover:text-white">
-              Products
-            </Link>
-          </li>
-          <li>
-            <Link to="orders" className="block hover:text-white">
-              Orders
-            </Link>
-          </li>
-          <li>
-            <Link to="reviews" className="block hover:text-white">
-              Reviews
-            </Link>
-          </li>
-          <li>
-            <Link to="discounts" className="block hover:text-white">
-              Discounts
+            <li>
+            <Link to="user-address" className="block hover:text-white">
+              Address
             </Link>
           </li>
           <li>
@@ -86,22 +44,24 @@ const AdminLayout = () => {
               Payments
             </Link>
           </li>
+          <li>
+            <Link to="support-ticket" className="block hover:text-white">
+              Support Ticket
+            </Link>
+          </li>
+          
         </ul>
       </div>
 
-      <div className="flex-1 flex flex-col">
-        {/*  Navbar with mobile menu button */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
         <div className="h-[70px] border-b bg-white flex items-center px-6 shadow-sm">
-          {/* Mobile Menu Button */}
           <button className="mr-4 md:hidden" onClick={() => setOpen(true)}>
             <Menu size={26} />
           </button>
-
           <AdminNavbar />
         </div>
 
-        {/* Main part content */}
-        <div className="p-10 flex-1">
+        <div className="flex-1 overflow-y-auto p-10">
           <div className="bg-white rounded-2xl shadow p-8 min-h-[80vh]">
             <Outlet />
           </div>
