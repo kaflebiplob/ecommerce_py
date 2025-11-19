@@ -13,7 +13,18 @@ const Support = () => {
       toast.error("failed to load support ticked");
     }
   };
-  const setAsMarked = () => {};
+  const updateStatus = async(id) => {
+    try {
+      const res =await api.patch(`/admin/support/${id}/update_status/`);
+      toast.success("Status updated to " + res.data.status.replace("_", " "));
+      loadTicket();
+      
+    } catch (error) {
+      toast.error('Failed to update the status');
+      console.log(error);
+      
+    }
+  };
   const deleteTicket = async (id) => {
     try {
       await api.delete(`/admin/support/${id}/`);
@@ -102,6 +113,12 @@ const Support = () => {
                     >
                       Edit
                     </Link> */}
+                     <button
+      onClick={() => updateStatus(d.id)}
+      className="px-4 py-1.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
+    >
+      Update Status
+    </button>
 
                       <button
                         onClick={() => deleteTicket(d.id)}
