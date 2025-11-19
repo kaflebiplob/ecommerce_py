@@ -28,13 +28,14 @@ import Review from "./admin/reviews/Review";
 import ReviewForm from "./admin/reviews/ReviewForm";
 import Support from "./admin/supports/Support";
 import Address from "./admin/address/Address";
+import User from "./admin/users/User";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <BrowserRouter>
-    <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
       {/* <Navbar/> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -50,16 +51,18 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<AdminProduct />} />
           <Route path="product/create" element={<ProductForm />} />
-          <Route path="product/edit/:id" element={<ProductForm />}/>
+          <Route path="product/edit/:id" element={<ProductForm />} />
           <Route path="orders" element={<AdminOrder />} />
-          <Route path="reviews" element={<Review/>}/>
+          <Route path="reviews" element={<Review />} />
           <Route path="review/create" element={<ReviewForm />} />
-          <Route path="review/edit/:id" element={<ReviewForm />}/>
+          <Route path="review/edit/:id" element={<ReviewForm />} />
           <Route path="discounts" element={<Discount />} />
-          <Route path="discount/create" element={<DiscountForm />}/>
+          <Route path="discount/create" element={<DiscountForm />} />
           <Route path="discount/edit/:id" element={<DiscountForm />} />
-          <Route path="support-ticket" element={<Support/>}/>
-          <Route path="user-address" element={<Address />}/>
+          <Route path="support-ticket" element={<Support />} />
+          <Route path="user-address" element={<Address />} />
+          {/* this route is for the user */}
+          <Route path="users" element={<User />} />
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>

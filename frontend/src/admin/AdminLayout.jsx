@@ -8,10 +8,11 @@ const AdminLayout = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
-
       <div
         className={`fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300 ${
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          open
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setOpen(false)}
       ></div>
@@ -22,17 +23,52 @@ const AdminLayout = () => {
         }`}
       >
         <h2 className="text-xl font-semibold border-b border-gray-700 pb-3">
-          <Link onClick={() => setOpen(false)} to="/">Admin Panel</Link>
+          <Link onClick={() => setOpen(false)} to="/">
+            Admin Panel
+          </Link>
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
-          <li><Link onClick={() => setOpen(false)} to="/admin/products">Products</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/orders">Orders</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/reviews">Reviews</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/discounts">Discounts</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/user-address">Address</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/payments">Payments</Link></li>
-          <li><Link onClick={() => setOpen(false)} to="/admin/support-ticket">Support Ticket</Link></li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/users">
+              Users
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/products">
+              Products
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/orders">
+              Orders
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/reviews">
+              Reviews
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/discounts">
+              Discounts
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/user-address">
+              Address
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/payments">
+              Payments
+            </Link>
+          </li>
+          <li>
+            <Link onClick={() => setOpen(false)} to="/admin/support-ticket">
+              Support Ticket
+            </Link>
+          </li>
         </ul>
       </div>
 
@@ -42,18 +78,50 @@ const AdminLayout = () => {
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
-          <li><Link to="products" className="block hover:text-white">Products</Link></li>
-          <li><Link to="orders" className="block hover:text-white">Orders</Link></li>
-          <li><Link to="reviews" className="block hover:text-white">Reviews</Link></li>
-          <li><Link to="discounts" className="block hover:text-white">Discounts</Link></li>
-          <li><Link to="user-address" className="block hover:text-white">Address</Link></li>
-          <li><Link to="payments" className="block hover:text-white">Payments</Link></li>
-          <li><Link to="support-ticket" className="block hover:text-white">Support Ticket</Link></li>
+           <li>
+            <Link to="users" className="block hover:text-white">
+              Users
+            </Link>
+          </li>
+          <li>
+            <Link to="products" className="block hover:text-white">
+              Products
+            </Link>
+          </li>
+          <li>
+            <Link to="orders" className="block hover:text-white">
+              Orders
+            </Link>
+          </li>
+          <li>
+            <Link to="reviews" className="block hover:text-white">
+              Reviews
+            </Link>
+          </li>
+          <li>
+            <Link to="discounts" className="block hover:text-white">
+              Discounts
+            </Link>
+          </li>
+          <li>
+            <Link to="user-address" className="block hover:text-white">
+              Address
+            </Link>
+          </li>
+          <li>
+            <Link to="payments" className="block hover:text-white">
+              Payments
+            </Link>
+          </li>
+          <li>
+            <Link to="support-ticket" className="block hover:text-white">
+              Support Ticket
+            </Link>
+          </li>
         </ul>
       </div>
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-
         <div className="h-[70px] border-b bg-white flex items-center px-6 shadow-sm">
           <button className="mr-4 md:hidden" onClick={() => setOpen(true)}>
             <Menu size={26} />
@@ -66,7 +134,6 @@ const AdminLayout = () => {
             <Outlet />
           </div>
         </div>
-
       </div>
     </div>
   );
