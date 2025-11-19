@@ -9,7 +9,7 @@ from reviews.models import Review
 from payments.models import Payment
 from django.contrib.auth.models import User
 from products.serializers import ProductSerializer
-from rest_framework.decorators import action
+
 
 class ProductAdminSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,20 +77,6 @@ class SupportAdminSerializer(serializers.ModelSerializer):
         model = SupporTicket
         fields = '__all__'
         
-    @action(detail=True, methods=["patch"])
-    def update_status(self, request, pk=None):
-        ticket = self.get_object()
-
-        # Cycle the status
-        if ticket.status == "open":
-            ticket.status = "in_progress"
-        elif ticket.status == "in_progress":
-            ticket.status = "closed"
-        else:
-            ticket.status = "open"
-
-        ticket.save()
-        return Response({"message": "Status updated", "status": ticket.status})
 
 class ReviewAdminSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)

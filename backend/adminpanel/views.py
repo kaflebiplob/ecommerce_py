@@ -10,6 +10,8 @@ from reviews.models import Review
 from address.models import Address
 from cart.models import Cart
 from support.models import SupporTicket, SupportMessage
+from rest_framework.decorators import action
+from rest_framework.response import Response
 # Create your views here.
 
 class IsAdminUser(permissions.BasePermission):
@@ -66,5 +68,19 @@ class SupportAdminViewSet(viewsets.ModelViewSet):
     queryset = SupporTicket.objects.all().order_by('-id')
     serializer_class = SupportAdminSerializer
     permission_classes = [IsAdminUser]
+    @action(detail=True, methods=["patch"])
+    def update_status(self, request, pk=None):
+        ticket = self.get_object()
+
+        # Cycle the status
+        if ticket.status == "open":
+            ticket.status = "in_progress"
+        elif ticket.status == "in_progress":
+            ticket.status = "closed"
+        else:
+            ticket.status = "open"
+
+        ticket.save()
+        return Response({"message": "Status updated", "status": ticket.status})
     
     
