@@ -104,19 +104,26 @@ class PaymentAdminSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class UserAdminSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
-        fields = ['id','username','email','is_superuser', 'is_staff','is_active']
+        fields = ['id','username','password','email','is_superuser', 'is_staff','is_active']
         
     def create(self, validated_data):
-        password = validated_data.pop("password")
+        password = validated_data.pop("password", None)
         user = User(**validated_data)
-        user.set_password(password)
+
+        if password:
+            user.set_password(password)
+        else:
+            raise serializers.ValidationError({"password": "Password is required"})
+
         user.save()
         return user
-    
+
     def update(self, instance, validated_data):
         password = validated_data.pop("password", None)
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
@@ -125,4 +132,3 @@ class UserAdminSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-        
