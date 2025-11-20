@@ -72,7 +72,7 @@ const User = () => {
         <h2 className="text-3xl font-semibold text-gray-800">Users</h2>
 
         <Link
-          to="/admin/discount/create"
+          to="/admin/user/create"
           className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
         >
           + Add User
@@ -140,10 +140,10 @@ const User = () => {
                   <td className="p-4 text-center">
                     <span
                       className={`px-3 py-1 rounded-full text-white text-sm ${
-                        user.active ? "bg-emerald-600" : "bg-gray-500"
+                        user.is_active ? "bg-emerald-600" : "bg-gray-500"
                       }`}
                     >
-                      {user.active ? "Active" : "Inactive"}
+                      {user.is_active ? "Active" : "Inactive"}
                     </span>
                   </td>
 

@@ -29,6 +29,7 @@ import ReviewForm from "./admin/reviews/ReviewForm";
 import Support from "./admin/supports/Support";
 import Address from "./admin/address/Address";
 import User from "./admin/users/User";
+import UserForm from "./admin/users/UserForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -63,6 +64,7 @@ function App() {
           <Route path="user-address" element={<Address />} />
           {/* this route is for the user */}
           <Route path="users" element={<User />} />
+          <Route path="user/create" element={<UserForm />}/>
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>
