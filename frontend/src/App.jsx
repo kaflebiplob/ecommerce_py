@@ -17,7 +17,6 @@ import OrderSuccess from "./pages/OrderSuccess";
 import OrderFailure from "./pages/OrderFailure";
 import AdminLayout from "./admin/AdminLayout";
 // import AdminProduct from "./admin/AdminProduct";
-import AdminOrder from "./admin/AdminOrder";
 import Payment from "./admin/Payment";
 import { Toaster } from "react-hot-toast";
 import AdminProduct from "./admin/products/AdminProduct";
@@ -30,6 +29,7 @@ import Support from "./admin/supports/Support";
 import Address from "./admin/address/Address";
 import User from "./admin/users/User";
 import UserForm from "./admin/users/UserForm";
+import Order from "./admin/orders/Order";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -53,7 +53,6 @@ function App() {
           <Route path="products" element={<AdminProduct />} />
           <Route path="product/create" element={<ProductForm />} />
           <Route path="product/edit/:id" element={<ProductForm />} />
-          <Route path="orders" element={<AdminOrder />} />
           <Route path="reviews" element={<Review />} />
           <Route path="review/create" element={<ReviewForm />} />
           <Route path="review/edit/:id" element={<ReviewForm />} />
@@ -65,6 +64,8 @@ function App() {
           {/* this route is for the user */}
           <Route path="users" element={<User />} />
           <Route path="user/create" element={<UserForm />}/>
+          {/* this route is for orders */}
+            <Route path="orders" element={<Order />} />
           <Route path="user/edit/:id" element={<UserForm />}/>
           <Route path="payments" element={<Payment />} />
         </Route>
