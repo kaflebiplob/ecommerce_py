@@ -84,10 +84,10 @@ const User = () => {
           <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
             <tr>
               <th className="p-4 text-center">S.N.</th>
-              <th className="p-4 text-center">Userbane</th>
+              <th className="p-4 text-center">Usernane</th>
               <th className="p-4 text-center">email</th>
-              <th className="p-4 text-center">is_superuser</th>
-              <th className="p-4 text-center">is_staff</th>
+              <th className="p-4 text-center">superuser</th>
+              <th className="p-4 text-center">staff</th>
               <th className="p-4 text-center">Status</th>
               <th className="p-4 text-center">Actions</th>
             </tr>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const UserForm = () => {
   const [formData, setFormData] = useState({
@@ -12,15 +12,25 @@ const UserForm = () => {
     is_active: true,
     is_staff: true,
   });
-//   const {id}
+  const { id } = useParams();
   const navigate = useNavigate();
-  //   const loadUsers = async () => {
-  //     const res = await api.get("/admin/users/");
-  //     setFormData(res.data);
-  //   };
-  //   useEffect(() => {
-  //     loadUsers();
-  //   },[]);
+  const loadUsers = async () => {
+    const res = await api.get(`/admin/users/${id}/`);
+    // setFormData(res.data);
+    setFormData({
+      username: res.data.username,
+      email: res.data.email,
+      password: "",
+      is_superuser: res.data.is_superuser,
+      is_staff: res.data.is_staff,
+      is_active: res.data.is_active,
+    });
+  };
+  useEffect(() => {
+    if (id) {
+      loadUsers();
+    }
+  }, [id]);
   const handleChange = (e) => {
     let { name, value } = e.target;
 
@@ -34,8 +44,13 @@ const UserForm = () => {
     e.preventDefault();
     // console.log("formdata:",formData);
     try {
-      await api.post("/admin/users/", formData);
-      toast.success("user added succesfully");
+      if (id) {
+        await api.put(`/admin/users/${id}/`, formData);
+        toast.success("user updated succesfully");
+      } else {
+        await api.post("/admin/users/", formData);
+        toast.success("user added succesfully");
+      }
       navigate("/admin/users");
     } catch (error) {
       toast.error("failed to add user");
@@ -45,8 +60,8 @@ const UserForm = () => {
   return (
     <div className="mx-auto p-5 bg-white  rounded">
       <h2 className="text-2xl font-semibold mb-4">
-        {/* {id ? "Edit Discount" : "Create Discount"} */}
-        Create User
+        {id ? "Edit User" : "Create User"}
+        {/* Create User */}
       </h2>
       <form
         className="space-y-3 bg-white p-5 rounded-lg"
@@ -59,7 +74,7 @@ const UserForm = () => {
               Username
             </label>
             <input
-              type="username"
+              type="text"
               className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               name="username"
               value={formData.username}
@@ -170,7 +185,8 @@ const UserForm = () => {
             className="bg-emerald-600 text-white py-2 px-4 cursor-pointer
          font-medium text-md rounded-lg hover:bg-emerald-700 transition"
           >
-            {/* {id ? "Update" : "Create"} */} Create
+            {id ? "Update" : "Create"}
+            {/* Create */}
           </button>
           <div className="bg-red-500 px-4 text-white hover:bg-red-700 transition text-md font-medium py-2 rounded-lg">
             <Link to="/admin/users" className="cursor-pointer">

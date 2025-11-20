@@ -65,6 +65,7 @@ function App() {
           {/* this route is for the user */}
           <Route path="users" element={<User />} />
           <Route path="user/create" element={<UserForm />}/>
+          <Route path="user/edit/:id" element={<UserForm />}/>
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>
