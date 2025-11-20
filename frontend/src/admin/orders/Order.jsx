@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Order = () => {
   const [orders, setorders] = useState([]);
-  const mounted = useRef();
+  const mounted = useRef(false);
   const loadOrders = async () => {
     try {
       const res = await api.get("/admin/orders/");
@@ -86,7 +86,10 @@ const Order = () => {
     );
   };
   useEffect(() => {
-    loadOrders();
+    if(!mounted.current){
+      loadOrders();
+      mounted.current=true;
+    }
   }, []);
   return (
     <div className="p-6">
@@ -173,7 +176,7 @@ const Order = () => {
                         to={`/admin/order/edit/${order.id}`}
                         className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                       >
-                        View
+                        Edit
                       </Link>
 
                       <button

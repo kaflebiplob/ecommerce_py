@@ -30,6 +30,7 @@ import Address from "./admin/address/Address";
 import User from "./admin/users/User";
 import UserForm from "./admin/users/UserForm";
 import Order from "./admin/orders/Order";
+import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -64,9 +65,11 @@ function App() {
           {/* this route is for the user */}
           <Route path="users" element={<User />} />
           <Route path="user/create" element={<UserForm />}/>
+          <Route path="user/edit/:id" element={<UserForm />}/>
           {/* this route is for orders */}
             <Route path="orders" element={<Order />} />
-          <Route path="user/edit/:id" element={<UserForm />}/>
+            {/* <Route path="order/create" element={<OrderForm />}/> */}
+            {/* <Route path="order/edit/:id" element={<OrderForm />}/> */}
           <Route path="payments" element={<Payment />} />
         </Route>
       </Routes>
