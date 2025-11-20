@@ -19,7 +19,7 @@ const DiscountForm = () => {
       const res = await api.get("admin/products/");
       setProducts(res.data);
     } catch (err) {
-      toast.error("Failed to load products", err);
+      toast.error("failed to load products", err);
     }
   };
 
@@ -48,15 +48,15 @@ const DiscountForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sending Form Data:", formData);
+    console.log("sending form data:", formData);
 
     try {
       if (id) {
         await api.put(`/admin/discounts/${id}/`, formData);
-        toast.success("Discount Updated Succesfully");
+        toast.success("discount updated succesfully");
       } else {
         await api.post("/admin/discounts/", formData);
-        toast.success("Discount Created Succesfully!!");
+        toast.success("discount created succesfully!!");
       }
       navigate("/admin/discounts");
 
@@ -68,7 +68,7 @@ const DiscountForm = () => {
       //     active: true,
       //   });
     } catch (err) {
-      const message = err.response?.data?.error || "Failed to process discount";
+      const message = err.response?.data?.error || "failed to process discount";
 
       toast.error(message);
       console.error("failed", err);

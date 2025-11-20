@@ -19,8 +19,8 @@ const ReviewForm = () => {
       const res = await api.get("/admin/products/");
       setProduct(res.data);
     } catch (err) {
-      toast.error("Failed fo fetch the reviews", err);
-      console.log("Failed to fetch reviews", err);
+      toast.error("failed fo fetch the reviews", err);
+      console.log("failed to fetch reviews", err);
     }
   };
   const loadUsers = async () => {
@@ -28,7 +28,7 @@ const ReviewForm = () => {
       const res = await api.get("/admin/users/");
       setUser(res.data);
     } catch (error) {
-      console.error("Failed tp load user", error);
+      console.error("failed to load user", error);
       toast.error("failed to load user");
     }
   };
@@ -65,15 +65,15 @@ const ReviewForm = () => {
     try {
       if (id) {
         await api.put(`/admin/reviews/${id}/`, formData);
-        toast.success("Succesfully Updated Review");
+        toast.success("succesfully updated review");
       } else {
         await api.post("/admin/reviews/", formData);
-        toast.success("Review Created Succesfully");
+        toast.success("review created succesfully");
       }
       navigate("/admin/reviews");
     } catch (error) {
-      toast.error("Failed to process review");
-      console.error("Failed to process review", error);
+      toast.error("failed to process review");
+      console.error("failed to process review", error);
     }
   };
   return (

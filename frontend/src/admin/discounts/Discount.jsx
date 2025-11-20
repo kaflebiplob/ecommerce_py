@@ -12,7 +12,7 @@ const Discount = () => {
       const res = await api.get("/admin/discounts/");
       setDiscount(res.data);
     } catch (err) {
-      toast.error("Failed to load discounts");
+      toast.error("failed to load discounts");
     }
   };
 
@@ -48,10 +48,10 @@ const Discount = () => {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/admin/discounts/${id}/`);
-      toast.success("Discount deleted successfully");
+      toast.success("discount deleted successfully");
       loadDiscounts();
     } catch (err) {
-      toast.error("Delete failed");
+      toast.error("delete failed");
     }
   };
 

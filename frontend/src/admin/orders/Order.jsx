@@ -96,12 +96,12 @@ const Order = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">Orders</h2>
 
-        <Link
+        {/* <Link
           to="/admin/order/create"
           className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
         >
           + Add Order
-        </Link>
+        </Link> */}
       </div>
 
       <div className="rounded-xl overflow-hidden">
@@ -172,12 +172,12 @@ const Order = () => {
 
                   <td className="p-4">
                     <div className="flex justify-center gap-3">
-                      <Link
+                      {/* <Link
                         to={`/admin/order/edit/${order.id}`}
                         className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                       >
                         Edit
-                      </Link>
+                      </Link> */}
 
                       <button
                         onClick={() => deleteOrder(order.id)}

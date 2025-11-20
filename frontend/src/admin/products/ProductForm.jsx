@@ -31,7 +31,7 @@ const ProductForm = () => {
       const res = await api.get("/admin/category/");
       setCategories(res.data);
     } catch (error) {
-      toast.error("Failed to load categories");
+      toast.error("failed to load categories");
     }
   };
 
@@ -48,7 +48,7 @@ const ProductForm = () => {
       });
       setPreview(res.data.image);
     } catch (error) {
-      toast.error("Failed to load Product");
+      toast.error("failed to load product");
     }
   };
 
@@ -79,17 +79,17 @@ const ProductForm = () => {
         await api.put(`/admin/products/${id}/`, fd, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success("Product Updated Successfully");
+        toast.success("product updated successfully");
       } else {
         await api.post(`/admin/products/`, fd, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success("Product Created Successfully");
+        toast.success("product created successfully");
       }
 
       navigate("/admin/products");
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("something went wrong");
     }
   };
 

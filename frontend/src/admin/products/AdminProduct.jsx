@@ -12,7 +12,7 @@ const AdminProduct = () => {
       const res = await api.get("/admin/products/");
       setProducts(res.data);
     } catch (err) {
-      toast.error("Failed to load products");
+      toast.error("failed to load products");
     }
   };
 
@@ -51,10 +51,10 @@ const AdminProduct = () => {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/admin/products/${id}/`);
-      toast.success("Product deleted successfully");
+      toast.success("product deleted successfully");
       loadProducts();
     } catch (err) {
-      toast.error("Delete failed");
+      toast.error("delete failed");
     }
   };
 

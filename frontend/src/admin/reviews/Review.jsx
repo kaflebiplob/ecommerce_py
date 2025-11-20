@@ -11,7 +11,7 @@ const Review = () => {
       const res = await api.get("/admin/reviews/");
       setReviews(res.data);
     } catch (error) {
-      toast.error("Failed to load reviews");
+      toast.error("failed to load reviews");
       console.log(error);
     }
   };
@@ -22,7 +22,7 @@ const Review = () => {
     }
     try {
       await api.delete(`/admin/reviews/${id}/`);
-      toast.success("Succesfully Deleted Review");
+      toast.success("succesfully deleted review");
       loadReviews();
     } catch (err) {
       toast.error("failed to delete the review");

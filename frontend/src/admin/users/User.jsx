@@ -19,7 +19,7 @@ const User = () => {
   const deleteUsers = async (id) => {
     try {
       await api.delete(`/admin/users/${id}/`);
-      toast.success("Succesfully deleted user");
+      toast.success("succesfully deleted user");
       loadUsers();
     } catch (error) {
       console.log(error);

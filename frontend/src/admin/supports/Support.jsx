@@ -10,27 +10,27 @@ const Support = () => {
       const res = await api.get("/admin/support/");
       setTicket(res.data);
     } catch (error) {
-      console.error("Failed to load all data");
+      console.error("failed to load all data");
       toast.error("failed to load support ticked");
     }
   };
   const updateStatus = async (id) => {
     try {
       const res = await api.patch(`/admin/support/${id}/update_status/`);
-      toast.success("Status updated to " + res.data.status.replace("_", " "));
+      toast.success("status updated to " + res.data.status.replace("_", " "));
       loadTicket();
     } catch (error) {
-      toast.error("Failed to update the status");
+      toast.error("failed to update the status");
       console.log(error);
     }
   };
   const deleteTicket = async (id) => {
     try {
       await api.delete(`/admin/support/${id}/`);
-      toast.success("Succesfully deleted ticket");
+      toast.success("succesfully deleted ticket");
       loadTicket();
     } catch (error) {
-      console.error("Failed to delete ticket", error);
+      console.error("failed to delete ticket", error);
       toast.error("failed to delete ticket");
     }
   };
