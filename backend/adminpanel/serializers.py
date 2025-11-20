@@ -109,7 +109,7 @@ class UserAdminSerializer(serializers.ModelSerializer):
         fields = ['id','username','email','is_superuser', 'is_staff','is_active']
         
     def create(self, validated_data):
-        password = validated_data.pop("password");
+        password = validated_data.pop("password")
         user = User(**validated_data)
         user.set_password(password)
         user.save()
