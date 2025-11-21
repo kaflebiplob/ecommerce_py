@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from .views import OrderAdminViewSet, ProductAdminViewSet, CategoryAdminViewSet, ReviewAdminViewSet,DiscountAdminViewSet,PaymentAdminViewSet,CartAdminViewSet,AddressAdminViewSet,UserAdminViewSet,SupportAdminViewSet
-
+from .views import admin_dashboard
+from django.urls import path
 router = DefaultRouter()
 router.register(r"products",ProductAdminViewSet, basename='admin-products')
 router.register(r"orders",OrderAdminViewSet,basename='admin-orders') 
@@ -15,4 +16,9 @@ router.register(r"support", SupportAdminViewSet, basename='admin-support')
 
 
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("dashboard/stats/", admin_dashboard, name="admin-dashboard"), 
+] + router.urls
+
+# urlpatterns = router.urls

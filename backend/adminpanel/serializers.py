@@ -22,6 +22,7 @@ class CategoryAdminSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class OrderAdminSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username',read_only=True)
     class Meta:
         model = Order
         fields= '__all__'

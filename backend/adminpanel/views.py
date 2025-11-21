@@ -10,9 +10,12 @@ from reviews.models import Review
 from address.models import Address
 from cart.models import Cart
 from support.models import SupporTicket, SupportMessage
-from rest_framework.decorators import action
+from rest_framework.decorators import action,api_view,permission_classes
 from rest_framework.response import Response
-# Create your views here.
+from django.db.models.functions import TruncMonth
+from django.db.models import Count, Sum
+# Create your views here.\
+    
 
 class IsAdminUser(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -84,3 +87,33 @@ class SupportAdminViewSet(viewsets.ModelViewSet):
         return Response({"message": "Status updated", "status": ticket.status})
     
     
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def admin_dashboard(request):
+    total_user = User.objects.count()
+    total_products = Product.objects.count()
+    total_order = Order.objects.count()
+    total_reviews = Review.objects.count()
+    
+    last_6_months = (
+        Order.objects.annotate(month=TruncMonth("created_at"))
+        .values("month")
+        .annotate(count=Count("id"))
+        .order_by("month")
+    )
+    new_users = (
+        User.objects.annotate(month=TruncMonth("date_joined"))
+        .values("month")
+        .annotate(count=Count("id"))
+        .order_by("month")
+    )
+    return Response({
+        "total_users":total_user,
+        "total_products":total_products,
+        "total_orders":total_order,
+        "total_reviews":total_reviews,
+        "monthly_orders":last_6_months,
+        "monthly_new_users":new_users,
+    })
+
+
