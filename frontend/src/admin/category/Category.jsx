@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const mounted = useRef(false);
+  const navigate = useNavigate();
   const loadCategories = async () => {
     try {
       const res = await api.get("/admin/category/");
@@ -18,11 +19,43 @@ const Category = () => {
     try {
       const res = await api.delete(`/admin/category/${id}/`);
       toast.success("successfully deleted category ");
+      //   navigate('/admin/categories')
+      loadCategories();
     } catch (error) {
       toast.error("failed to delete category");
       console.log(error);
     }
   };
+  const confirmDelete = (id) => {
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <span className="text-lg font-medium">Delete Category?</span>
+        <span className="text-sm text-gray-700">
+          This action cannot be undone.
+        </span>
+
+        <div className="flex gap-3 mt-2">
+          <button
+            className="bg-red-600 text-white px-3 py-1 rounded"
+            onClick={() => {
+              toast.dismiss(t.id);
+              deleteCategories(id);
+            }}
+          >
+            Yes, Delete
+          </button>
+
+          <button
+            className="bg-gray-300 px-3 py-1 rounded"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
   useEffect(() => {
     if (!mounted.current) {
       loadCategories();
@@ -47,11 +80,9 @@ const Category = () => {
           <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
             <tr>
               <th className="p-4 text-center">S.N.</th>
-              <th className="p-4 text-center">Product</th>
-              <th className="p-4 text-center">Discount (%)</th>
-              <th className="p-4 text-center">Valid From</th>
-              <th className="p-4 text-center">Valid To</th>
-              <th className="p-4 text-center">Status</th>
+              <th className="p-4 text-center">name</th>
+              <th className="p-4 text-center">description</th>
+              {/* <th className="p-4 text-center">Status</th> */}
               <th className="p-4 text-center">Actions</th>
             </tr>
           </thead>
@@ -77,14 +108,12 @@ const Category = () => {
                   <td className="p-4 text-center font-medium">{index + 1}</td>
 
                   <td className="p-4 text-center font-medium">
-                    {d.product?.name || "—"}
+                    {d.name || "—"}
                   </td>
-
-                  <td className="p-4 text-center">{d.discount_percent}%</td>
-                  <td className="p-4 text-center">{d.valid_from}</td>
-                  <td className="p-4 text-center">{d.valid_to}</td>
-
-                  <td className="p-4 text-center">
+                  <td className="p-4 text-center font-medium">
+                    {d.description || "—"}
+                  </td>
+                  {/* <td className="p-4 text-center">
                     <span
                       className={`px-3 py-1 rounded-full text-white text-sm ${
                         d.active ? "bg-emerald-600" : "bg-gray-500"
@@ -92,7 +121,7 @@ const Category = () => {
                     >
                       {d.active ? "Active" : "Inactive"}
                     </span>
-                  </td>
+                  </td> */}
 
                   <td className="p-4">
                     <div className="flex justify-center gap-3">
@@ -104,7 +133,7 @@ const Category = () => {
                       </Link>
 
                       <button
-                        onClick={() => deleteCategories(d.id)}
+                        onClick={() => confirmDelete(d.id)}
                         className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
                       >
                         Delete
