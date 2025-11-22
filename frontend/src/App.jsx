@@ -31,6 +31,7 @@ import User from "./admin/users/User";
 import UserForm from "./admin/users/UserForm";
 import Order from "./admin/orders/Order";
 import AdminDashboard from "./admin/AdminDashboard";
+import Category from "./admin/category/Category";
 // import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
@@ -68,9 +69,13 @@ function App() {
           <Route path="user/create" element={<UserForm />}/>
           <Route path="user/edit/:id" element={<UserForm />}/>
           {/* this route is for orders */}
-            <Route path="orders" element={<Order />} />
-            {/* <Route path="order/create" element={<OrderForm />}/> */}
-            {/* <Route path="order/edit/:id" element={<OrderForm />}/> */}
+          <Route path="orders" element={<Order />} />
+          {/* <Route path="order/create" element={<OrderForm />}/> */}
+          {/* <Route path="order/edit/:id" element={<OrderForm />}/> */}
+
+          {/* this route is for category */}
+          <Route path="categories" element={<Category />}/>
+
           <Route path="payments" element={<Payment />} />
           <Route path="" element={<AdminDashboard />}/>
         </Route>

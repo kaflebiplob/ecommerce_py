@@ -39,6 +39,11 @@ const AdminLayout = () => {
               Products
             </Link>
           </li>
+           <li>
+            <Link onClick={() => setOpen(false)} to="/admin/category">
+              Category
+            </Link>
+          </li>
           <li>
             <Link onClick={() => setOpen(false)} to="/admin/orders">
               Orders
@@ -86,6 +91,11 @@ const AdminLayout = () => {
           <li>
             <Link to="products" className="block hover:text-white">
               Products
+            </Link>
+          </li>
+            <li>
+            <Link to="categories" className="block hover:text-white">
+              Category
             </Link>
           </li>
           <li>
