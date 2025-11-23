@@ -3,11 +3,12 @@ from rest_framework import viewsets,permissions
 from products.models import Product, Category
 from orders.models import Order
 from django.contrib.auth.models import User
-from .serializers import ProductAdminSerializer, OrderAdminSerializer, CategoryAdminSerializer,AddressAdminSerializer,SupportAdminSerializer,PaymentAdminSerializer,UserAdminSerializer,DiscountAdminSerializer,ReviewAdminSerializer,CartAdminSerializer
+from .serializers import ProductAdminSerializer,WishlistAdminSerializer, OrderAdminSerializer, CategoryAdminSerializer,AddressAdminSerializer,SupportAdminSerializer,PaymentAdminSerializer,UserAdminSerializer,DiscountAdminSerializer,ReviewAdminSerializer,CartAdminSerializer
 from payments.models import Payment
 from discount.models import Discount
 from reviews.models import Review
 from address.models import Address
+from wishlist.models import Wishlist
 from cart.models import Cart
 from support.models import SupporTicket, SupportMessage
 from rest_framework.decorators import action,api_view,permission_classes
@@ -69,6 +70,11 @@ class ReviewAdminViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewAdminSerializer
     permission_classes = [IsAdminUser]
     
+class WishlistAdminViewSet(viewsets.ModelViewSet):
+    queryset = Wishlist.objects.all().order_by('-id')
+    serializer_class = WishlistAdminSerializer
+    permission_classes = [IsAdminUser]
+    
 class SupportAdminViewSet(viewsets.ModelViewSet):
     queryset = SupporTicket.objects.all().order_by('-id')
     serializer_class = SupportAdminSerializer
@@ -87,36 +93,6 @@ class SupportAdminViewSet(viewsets.ModelViewSet):
 
         ticket.save()
         return Response({"message": "Status updated", "status": ticket.status})
-    
-    
-# @api_view(["GET"])
-# @permission_classes([IsAdminUser])
-# def admin_dashboard(request):
-#     total_user = User.objects.count()
-#     total_products = Product.objects.count()
-#     total_order = Order.objects.count()
-#     total_reviews = Review.objects.count()
-    
-#     last_6_months = (
-#         Order.objects.annotate(month=TruncMonth("created_at"))
-#         .values("month")
-#         .annotate(count=Count("id"))
-#         .order_by("month")
-#     )
-#     new_users = (
-#         User.objects.annotate(month=TruncMonth("date_joined"))
-#         .values("month")
-#         .annotate(count=Count("id"))
-#         .order_by("month")
-#     )
-#     return Response({
-#         "total_users":total_user,
-#         "total_products":total_products,
-#         "total_orders":total_order,
-#         "total_reviews":total_reviews,
-#         "monthly_orders":last_6_months,
-#         "monthly_new_users":new_users,
-#     })
 
 
 @api_view(["GET"])

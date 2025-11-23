@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import OrderAdminViewSet, ProductAdminViewSet, CategoryAdminViewSet, ReviewAdminViewSet,DiscountAdminViewSet,PaymentAdminViewSet,CartAdminViewSet,AddressAdminViewSet,UserAdminViewSet,SupportAdminViewSet
+from .views import OrderAdminViewSet, ProductAdminViewSet, CategoryAdminViewSet, ReviewAdminViewSet,DiscountAdminViewSet,PaymentAdminViewSet,CartAdminViewSet,AddressAdminViewSet,UserAdminViewSet,SupportAdminViewSet,WishlistAdminViewSet
 from .views import admin_dashboard
 from django.urls import path
 router = DefaultRouter()
@@ -13,8 +13,7 @@ router.register(r"address", AddressAdminViewSet, basename='admin-address')
 router.register(r"users", UserAdminViewSet, basename='admin-users')
 router.register(r"cart", CartAdminViewSet, basename='admin-cart')
 router.register(r"support", SupportAdminViewSet, basename='admin-support')
-
-
+router.register(r"wishlist", WishlistAdminViewSet, basename='admin-wishlist')
 
 
 urlpatterns = [

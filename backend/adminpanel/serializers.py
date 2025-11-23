@@ -7,6 +7,7 @@ from support.models import SupporTicket,SupportMessage
 from cart.models import Cart
 from reviews.models import Review
 from payments.models import Payment
+from wishlist.models import Wishlist
 from django.contrib.auth.models import User
 from products.serializers import ProductSerializer
 
@@ -133,3 +134,8 @@ class UserAdminSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+class WishlistAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Wishlist
+        fields= '__all__'
