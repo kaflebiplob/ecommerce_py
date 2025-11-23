@@ -18,6 +18,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/',blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_featured = models.BooleanField(default=False) 
+    status = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
