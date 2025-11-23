@@ -17,7 +17,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import OrderFailure from "./pages/OrderFailure";
 import AdminLayout from "./admin/AdminLayout";
 // import AdminProduct from "./admin/AdminProduct";
-import Payment from "./admin/Payment";
+import Payment from "./admin/payments/Payment";
 import { Toaster } from "react-hot-toast";
 import AdminProduct from "./admin/products/AdminProduct";
 import ProductForm from "./admin/products/ProductForm";
