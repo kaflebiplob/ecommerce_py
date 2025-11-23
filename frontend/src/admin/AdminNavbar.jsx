@@ -45,7 +45,7 @@ const AdminNavbar = () => {
       </div>
 
       <div className="flex items-center gap-4 sm:gap-6 text-gray-700">
-        <FiBell className="text-lg sm:text-xl cursor-pointer hover:text-black transition" />
+        {/* <FiBell className="text-lg sm:text-xl cursor-pointer hover:text-black transition" /> */}
 
         <div className="relative" ref={dropdownRef}>
           <div
@@ -53,7 +53,7 @@ const AdminNavbar = () => {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <FiUser className="text-lg sm:text-xl" />
-            <span className="text-sm font-medium hidden sm:inline"></span>
+            <span className="text-sm font-medium hidden sm:inline">Admin</span>
           </div>
 
           {isDropdownOpen && (
