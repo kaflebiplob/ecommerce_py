@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 const Support = () => {
   const [ticket, setTicket] = useState([]);
   const mounted = useRef(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const supportPerPage = 1;
   const loadTicket = async () => {
     try {
       const res = await api.get("/admin/support/");
@@ -40,10 +42,15 @@ const Support = () => {
       mounted.current = true;
     }
   }, []);
+  const indexOfLast = currentPage * supportPerPage;
+  const indexOfFirst = indexOfLast - supportPerPage;
+  const currentTicket = ticket.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(ticket.length / supportPerPage);
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-         <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
           Support Ticket
         </h2>
 
@@ -70,7 +77,7 @@ const Support = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {ticket.length === 0 ? (
+              {currentTicket.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -80,7 +87,7 @@ const Support = () => {
                   </td>
                 </tr>
               ) : (
-                ticket.map((d, index) => (
+                currentTicket.map((d, index) => (
                   <tr
                     key={d.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -142,6 +149,23 @@ const Support = () => {
           </table>
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

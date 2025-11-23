@@ -85,7 +85,6 @@ const ReviewForm = () => {
   return (
     <div className="sm:py-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {id ? "Edit Review" : "Create Review"}
@@ -94,12 +93,10 @@ const ReviewForm = () => {
 
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
           <div className="space-y-5">
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product
+                  Product{!id && <span className="text-red-600">*</span>}
                 </label>
                 <select
                   name="product_id"
@@ -119,14 +116,14 @@ const ReviewForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  User
+                  User{!id && <span className="text-red-600">*</span>}
                 </label>
                 <select
                   name="user_id"
                   value={formData.user_id}
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg 
-                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
                 >
                   <option value="">Select User</option>
                   {user.map((item) => (
@@ -139,7 +136,7 @@ const ReviewForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Rating
+                  Rating{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="number"
@@ -157,7 +154,7 @@ const ReviewForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Comment
+                Comment{!id && <span className="text-red-600">*</span>}
               </label>
               <textarea
                 name="comment"
@@ -178,7 +175,7 @@ const ReviewForm = () => {
               >
                 {id ? "Update" : "Create"}
               </button>
-              
+
               <Link
                 to="/admin/reviews"
                 className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
@@ -187,10 +184,8 @@ const ReviewForm = () => {
                 Cancel
               </Link>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );

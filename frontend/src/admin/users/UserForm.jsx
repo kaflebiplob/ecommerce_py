@@ -46,6 +46,10 @@ const UserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let dataToSend = { ...formData };
+      if (id && !formData.password) {
+        delete dataToSend.password;
+      }
       if (id) {
         await api.put(`/admin/users/${id}/`, formData);
         toast.success("user updated successfully");
@@ -63,7 +67,6 @@ const UserForm = () => {
   return (
     <div className="sm:py-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {id ? "Edit User" : "Create User"}
@@ -72,12 +75,10 @@ const UserForm = () => {
 
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
           <div className="space-y-5">
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Username
+                  Username{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="text"
@@ -89,14 +90,15 @@ const UserForm = () => {
                   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
                   required
                 />
+
                 <span className="text-xs text-gray-500 mt-1 block">
-                  Letters, numbers, underscore only - no spaces
+                  {/* Letters, numbers, underscore only - no spaces */}
                 </span>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                  Email{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="email"
@@ -111,14 +113,16 @@ const UserForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  Password{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder={id ? "Leave blank to keep current" : "Enter password"}
+                  // placeholder={
+                  //   id ? "Leave blank to keep current" : "Enter password"
+                  // }
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
                   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
@@ -126,31 +130,41 @@ const UserForm = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-2">
-              
               <div>
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <span className="text-sm font-medium text-gray-700">Superuser:</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Superuser:
+                  </span>
                   <input
                     type="checkbox"
                     name="is_superuser"
                     checked={formData.is_superuser}
                     onChange={(e) =>
-                      setFormData({ ...formData, is_superuser: e.target.checked })
+                      setFormData({
+                        ...formData,
+                        is_superuser: e.target.checked,
+                      })
                     }
                     className="sr-only peer"
                   />
-                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  <div
+                    className="relative w-11 h-6 bg-gray-300 rounded-full peer 
                   peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
-                  transition-colors">
-                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
-                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  transition-colors"
+                  >
+                    <div
+                      className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"
+                    ></div>
                   </div>
                 </label>
               </div>
 
               <div>
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <span className="text-sm font-medium text-gray-700">Staff:</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Staff:
+                  </span>
                   <input
                     type="checkbox"
                     name="is_staff"
@@ -160,18 +174,24 @@ const UserForm = () => {
                     }
                     className="sr-only peer"
                   />
-                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  <div
+                    className="relative w-11 h-6 bg-gray-300 rounded-full peer 
                   peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
-                  transition-colors">
-                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
-                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  transition-colors"
+                  >
+                    <div
+                      className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"
+                    ></div>
                   </div>
                 </label>
               </div>
 
               <div>
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <span className="text-sm font-medium text-gray-700">Active:</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Active:
+                  </span>
                   <input
                     type="checkbox"
                     name="is_active"
@@ -181,11 +201,15 @@ const UserForm = () => {
                     }
                     className="sr-only peer"
                   />
-                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  <div
+                    className="relative w-11 h-6 bg-gray-300 rounded-full peer 
                   peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
-                  transition-colors">
-                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
-                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  transition-colors"
+                  >
+                    <div
+                      className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"
+                    ></div>
                   </div>
                 </label>
               </div>
@@ -200,7 +224,7 @@ const UserForm = () => {
               >
                 {id ? "Update" : "Create"}
               </button>
-              
+
               <Link
                 to="/admin/users"
                 className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
@@ -209,10 +233,8 @@ const UserForm = () => {
                 Cancel
               </Link>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../api/api";
 import toast from "react-hot-toast";
+import { useSearch } from "../../context/SearchCOntext";
 
 const AdminProduct = () => {
+  const { globalSearch } = useSearch();
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
   const mounted = useRef(false);
 
   const loadProducts = async () => {
@@ -12,7 +16,7 @@ const AdminProduct = () => {
       const res = await api.get("/admin/products/");
       setProducts(res.data);
     } catch (err) {
-      toast.error("failed to load products");
+      toast.error("Failed to load products");
     }
   };
 
@@ -44,17 +48,17 @@ const AdminProduct = () => {
           </div>
         </div>
       ),
-      { duration: 5000 }
+      { duration: 3000 }
     );
   };
 
   const handleDelete = async (id) => {
     try {
       await api.delete(`/admin/products/${id}/`);
-      toast.success("product deleted successfully");
+      toast.success("Product deleted successfully");
       loadProducts();
     } catch (err) {
-      toast.error("delete failed");
+      toast.error("Delete failed");
     }
   };
 
@@ -65,9 +69,20 @@ const AdminProduct = () => {
     }
   }, []);
 
+  const filteredProducts = globalSearch
+    ? products.filter((p) =>
+        JSON.stringify(p).toLowerCase().includes(globalSearch.toLowerCase())
+      )
+    : products;
+
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
           Products
         </h2>
@@ -80,7 +95,7 @@ const AdminProduct = () => {
         </Link>
       </div>
 
-      <div className="rounded-xl overflow-hidden ">
+      <div className="rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
@@ -95,7 +110,7 @@ const AdminProduct = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {products.length === 0 ? (
+              {currentProducts.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -105,7 +120,7 @@ const AdminProduct = () => {
                   </td>
                 </tr>
               ) : (
-                products.map((p, index) => (
+                currentProducts.map((p, index) => (
                   <tr
                     key={p.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -126,8 +141,8 @@ const AdminProduct = () => {
                     <td className="p-4 text-center">Rs. {p.price}</td>
                     <td className="p-4 text-center">{p.stock}</td>
 
-                    <td className="p-4 gap-3">
-                      <div className=" flex justify-center items-center gap-3">
+                    <td className="p-4">
+                      <div className="flex justify-center items-center gap-3">
                         <Link
                           to={`/admin/product/edit/${p.id}`}
                           className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
@@ -150,6 +165,24 @@ const AdminProduct = () => {
           </table>
         </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

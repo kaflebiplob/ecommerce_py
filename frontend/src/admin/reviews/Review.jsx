@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 const Review = () => {
   const [reviews, setReviews] = useState([]);
   const mounted = useRef(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 10;
   const loadReviews = async () => {
     try {
       const res = await api.get("/admin/reviews/");
@@ -15,36 +17,65 @@ const Review = () => {
       console.log(error);
     }
   };
+
   const deleteReview = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this review?")) {
-      toast("Delete cancelled");
-      return;
-    }
-    try {
-      await api.delete(`/admin/reviews/${id}/`);
-      toast.success("succesfully deleted review");
-      loadReviews();
-    } catch (err) {
-      toast.error("failed to delete the review");
-      console.log("failed to delete the review", err);
-    }
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p>Are you sure you want to delete this review?</p>
+          <div className="flex gap-2 justify-end">
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await api.delete(`/admin/reviews/${id}/`);
+                  toast.success("Successfully deleted review");
+                  loadReviews();
+                } catch (err) {
+                  toast.error("Failed to delete the review");
+                  console.log(err);
+                }
+              }}
+            >
+              Yes
+            </button>
+
+            <button
+              className="px-3 py-1 bg-gray-300 text-black rounded"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: 3000,
+      }
+    );
   };
+
   useEffect(() => {
     if (!mounted.current) {
       loadReviews();
       mounted.current = true;
     }
   }, []);
+  const indexOfLast = currentPage * reviewsPerPage;
+  const indexOfFirst = indexOfLast - reviewsPerPage;
+  const currentReview = reviews.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-         <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
           Reviews
         </h2>
         <Link
           to="/admin/review/create"
-         className="bg-emerald-600 text-white px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg shadow hover:bg-emerald-700 transition whitespace-nowrap"
-       >
+          className="bg-emerald-600 text-white px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg shadow hover:bg-emerald-700 transition whitespace-nowrap"
+        >
           + Add
         </Link>
       </div>
@@ -64,7 +95,7 @@ const Review = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {reviews.length === 0 ? (
+              {currentReview.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -74,7 +105,7 @@ const Review = () => {
                   </td>
                 </tr>
               ) : (
-                reviews.map((d, index) => (
+                currentReview.map((d, index) => (
                   <tr
                     key={d.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -115,6 +146,23 @@ const Review = () => {
           </table>
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

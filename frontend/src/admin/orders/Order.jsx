@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 const Order = () => {
   const [orders, setorders] = useState([]);
   const mounted = useRef(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 10;
   const loadOrders = async () => {
     try {
       const res = await api.get("/admin/orders/");
@@ -83,7 +85,7 @@ const Order = () => {
           </div>
         </div>
       ),
-      { duration: 5000 }
+      { duration: 3000 }
     );
   };
   useEffect(() => {
@@ -92,6 +94,10 @@ const Order = () => {
       mounted.current = true;
     }
   }, []);
+  const indexOfLast = currentPage * ordersPerPage;
+  const indexOfFirst = indexOfLast - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -122,7 +128,7 @@ const Order = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {orders.length === 0 ? (
+              {currentOrders.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -132,7 +138,7 @@ const Order = () => {
                   </td>
                 </tr>
               ) : (
-                orders.map((order, index) => (
+                currentOrders.map((order, index) => (
                   <tr
                     key={order.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -200,6 +206,23 @@ const Order = () => {
           </table>
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

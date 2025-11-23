@@ -29,11 +29,11 @@ const AdminLayout = () => {
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
-           <li>
+           {/* <li>
             <Link onClick={() => setOpen(false)} to="/admin">
               Dashboard
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link onClick={() => setOpen(false)} to="/admin/users">
               Users

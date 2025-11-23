@@ -95,7 +95,6 @@ const ProductForm = () => {
   return (
     <div className="sm:py-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {isEdit ? "Edit Product" : "Create Product"}
@@ -104,12 +103,10 @@ const ProductForm = () => {
 
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
           <div className="space-y-5">
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
+                  Name{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="text"
@@ -124,7 +121,7 @@ const ProductForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price
+                  Price{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="number"
@@ -140,7 +137,7 @@ const ProductForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Stock
+                  Stock{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="number"
@@ -155,7 +152,7 @@ const ProductForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category
+                  Category{!id && <span className="text-red-600">*</span>}
                 </label>
                 <select
                   name="category"
@@ -177,7 +174,7 @@ const ProductForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description
+                Description{!id && <span className="text-red-600">*</span>}
               </label>
               <textarea
                 name="description"
@@ -221,7 +218,7 @@ const ProductForm = () => {
               >
                 {isEdit ? "Update" : "Create"}
               </button>
-              
+
               <Link
                 to="/admin/products"
                 className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
@@ -230,10 +227,8 @@ const ProductForm = () => {
                 Cancel
               </Link>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );

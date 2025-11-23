@@ -61,7 +61,7 @@ const CategoryForm = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
+                  Name{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="text"
@@ -80,12 +80,11 @@ const CategoryForm = () => {
                 </label>
                 <textarea
                   name="description"
-                  rows={3}
+                  rows={1}
                   value={formData.description}
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
                   focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
-                  required
                 ></textarea>
               </div>
             </div>

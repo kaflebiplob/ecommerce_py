@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 
 const User = () => {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+
   const mounted = useRef(false);
+
   const loadUsers = async () => {
     try {
       const res = await api.get("/admin/users/");
@@ -26,6 +30,7 @@ const User = () => {
       toast.error("failed to delete user");
     }
   };
+
   const confirmDelete = (id) => {
     toast(
       (t) => (
@@ -66,6 +71,13 @@ const User = () => {
       mounted.current = true;
     }
   }, []);
+
+  // Pagination Logic
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(users.length / usersPerPage);
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -106,20 +118,23 @@ const User = () => {
                   </td>
                 </tr>
               ) : (
-                users.map((user, index) => (
+                currentUsers.map((user, index) => (
                   <tr
                     key={user.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
                       index % 2 === 0 ? "bg-white" : "bg-gray-50"
                     }`}
                   >
-                    <td className="p-4 text-center font-medium">{index + 1}</td>
+                    <td className="p-4 text-center font-medium">
+                      {indexOfFirstUser + index + 1}
+                    </td>
 
                     <td className="p-4 text-center font-medium">
                       {user.username || "—"}
                     </td>
 
                     <td className="p-4 text-center">{user.email}</td>
+
                     <td className="p-4 text-center">
                       <span
                         className={`px-3 py-1 rounded-full text-white text-sm ${
@@ -129,6 +144,7 @@ const User = () => {
                         {user.is_superuser ? "Yes" : "No"}
                       </span>
                     </td>
+
                     <td className="p-4 text-center">
                       <span
                         className={`px-3 py-1 rounded-full text-white text-sm ${
@@ -172,6 +188,39 @@ const User = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* PAGINATION BELOW TABLE */}
+      <div className="flex justify-center items-center gap-3 mt-6">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 rounded ${
+              currentPage === i + 1
+                ? "bg-emerald-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

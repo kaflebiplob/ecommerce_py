@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 const Discount = () => {
   const [discount, setDiscount] = useState([]);
   const mounted = useRef(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const discountPerPage = 1;
 
   const loadDiscounts = async () => {
     try {
@@ -17,32 +19,37 @@ const Discount = () => {
   };
 
   const deleteDiscount = (id) => {
-    toast((t) => (
-      <div className="flex flex-col gap-2">
-        <p className="font-medium text-gray-800">
-          Are you sure you want to delete this discount?
-        </p>
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p className="font-medium text-gray-800">
+            Are you sure you want to delete this discount?
+          </p>
 
-        <div className="flex gap-3 mt-2">
-          <button
-            onClick={() => {
-              toast.dismiss(t.id);
-              handleDelete(id);
-            }}
-            className="px-3 py-1 bg-red-600 text-white rounded"
-          >
-            Yes, Delete
-          </button>
+          <div className="flex gap-3 mt-2">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                handleDelete(id);
+              }}
+              className="px-3 py-1 bg-red-600 text-white rounded"
+            >
+              Yes, Delete
+            </button>
 
-          <button
-            onClick={() => toast.dismiss(t.id)}
-            className="px-3 py-1 bg-gray-300 rounded"
-          >
-            Cancel
-          </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1 bg-gray-300 rounded"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </div>
-    ));
+      ),
+      {
+        duration: 3000,
+      }
+    );
   };
 
   const handleDelete = async (id) => {
@@ -61,6 +68,10 @@ const Discount = () => {
       mounted.current = true;
     }
   }, []);
+  const indexOfLast = currentPage * discountPerPage;
+  const indexOfFirst = indexOfLast - discountPerPage;
+  const currentDiscount = discount.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(discount.length / discountPerPage);
 
   return (
     <div className="p-6">
@@ -92,7 +103,7 @@ const Discount = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {discount.length === 0 ? (
+              {currentDiscount.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -102,7 +113,7 @@ const Discount = () => {
                   </td>
                 </tr>
               ) : (
-                discount.map((d, index) => (
+                currentDiscount.map((d, index) => (
                   <tr
                     key={d.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -153,6 +164,23 @@ const Discount = () => {
           </table>
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

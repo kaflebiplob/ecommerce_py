@@ -74,7 +74,6 @@ const DiscountForm = () => {
   return (
     <div className="sm:py-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {id ? "Edit Discount" : "Create Discount"}
@@ -83,12 +82,10 @@ const DiscountForm = () => {
 
         <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
           <div className="space-y-5">
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product
+                  Product{!id && <span className="text-red-600">*</span>}
                 </label>
                 <select
                   name="product_id"
@@ -108,14 +105,14 @@ const DiscountForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Discount (%)
+                  Discount(%){!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="number"
                   name="discount_percent"
                   value={formData.discount_percent}
                   onChange={handleChange}
-                  placeholder="e.g., 20"
+                  placeholder="e.g. 20"
                   min="0"
                   max="100"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
@@ -125,10 +122,9 @@ const DiscountForm = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Valid From
+                  Valid From{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="date"
@@ -142,7 +138,7 @@ const DiscountForm = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Valid To
+                  Valid To{!id && <span className="text-red-600">*</span>}
                 </label>
                 <input
                   type="date"
@@ -157,7 +153,9 @@ const DiscountForm = () => {
 
             <div className="pt-2">
               <label className="flex items-center gap-3 cursor-pointer">
-                <span className="text-sm font-medium text-gray-700">Status:</span>
+                <span className="text-sm font-medium text-gray-700">
+                  Status:
+                </span>
                 <input
                   type="checkbox"
                   name="active"
@@ -167,11 +165,15 @@ const DiscountForm = () => {
                   }
                   className="sr-only peer"
                 />
-                <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                <div
+                  className="relative w-11 h-6 bg-gray-300 rounded-full peer 
                 peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
-                transition-colors">
-                  <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
-                  shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                transition-colors"
+                >
+                  <div
+                    className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                  shadow-sm transition-transform peer-checked:translate-x-5"
+                  ></div>
                 </div>
               </label>
             </div>
@@ -185,7 +187,7 @@ const DiscountForm = () => {
               >
                 {id ? "Update" : "Create"}
               </button>
-              
+
               <Link
                 to="/admin/discounts"
                 className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
@@ -194,10 +196,8 @@ const DiscountForm = () => {
                 Cancel
               </Link>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );

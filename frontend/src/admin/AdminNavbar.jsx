@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiBell, FiSearch, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../context/SearchCOntext";
 
 const AdminNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const {setGlobalSearch} = useSearch();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,51 +31,41 @@ const AdminNavbar = () => {
     navigate("/login");
   };
 
-  const handleProfile = () => {
-    navigate("/admin/profile");
-    setIsDropdownOpen(false);
-  };
-
   return (
     <div className="flex items-center justify-between w-full gap-3 sm:gap-4">
       {/* Search */}
       <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 rounded-full px-3 sm:px-4 py-2 flex-1 sm:flex-initial sm:w-[300px] max-w-md">
-        <FiSearch className="text-gray-500 text-base sm:text-lg flex-shrink-0" />
+        <FiSearch className="text-gray-500 text-base sm:text-lg shrink-0" />
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search Products..."
           className="bg-transparent outline-none text-sm text-gray-700 w-full"
+          onChange={(e) => setGlobalSearch(e.target.value)} 
         />
       </div>
 
-      {/* Icons */}
       <div className="flex items-center gap-4 sm:gap-6 text-gray-700">
         <FiBell className="text-lg sm:text-xl cursor-pointer hover:text-black transition" />
 
-        {/* User Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <div
             className="flex items-center gap-2 cursor-pointer hover:text-black transition"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <FiUser className="text-lg sm:text-xl" />
-            <span className="text-sm font-medium hidden sm:inline">Admin</span>
+            <span className="text-sm font-medium hidden sm:inline"></span>
           </div>
 
-          {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
               {/* Profile */}
-              <button
-                onClick={handleProfile}
+              {/* <button
+                
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
               >
                 <FiSettings className="text-base" />
                 <span>Profile</span>
-              </button>
-
-              {/* Divider */}
-              <div className="border-t border-gray-200 my-1"></div>
+              </button> */}
 
               {/* Logout */}
               <button

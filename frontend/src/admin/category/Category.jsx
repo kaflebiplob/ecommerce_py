@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 const Category = () => {
   const [categories, setCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const categoryPerPage = 1;
   const mounted = useRef(false);
   const navigate = useNavigate();
   const loadCategories = async () => {
@@ -27,33 +29,38 @@ const Category = () => {
     }
   };
   const confirmDelete = (id) => {
-    toast((t) => (
-      <div className="flex flex-col gap-3">
-        <span className="text-lg font-medium">Delete Category?</span>
-        <span className="text-sm text-gray-700">
-          This action cannot be undone.
-        </span>
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <span className="text-lg font-medium">Delete Category?</span>
+          <span className="text-sm text-gray-700">
+            This action cannot be undone.
+          </span>
 
-        <div className="flex gap-3 mt-2">
-          <button
-            className="bg-red-600 text-white px-3 py-1 rounded"
-            onClick={() => {
-              toast.dismiss(t.id);
-              deleteCategories(id);
-            }}
-          >
-            Yes, Delete
-          </button>
+          <div className="flex gap-3 mt-2">
+            <button
+              className="bg-red-600 text-white px-3 py-1 rounded"
+              onClick={() => {
+                toast.dismiss(t.id);
+                deleteCategories(id);
+              }}
+            >
+              Yes, Delete
+            </button>
 
-          <button
-            className="bg-gray-300 px-3 py-1 rounded"
-            onClick={() => toast.dismiss(t.id)}
-          >
-            Cancel
-          </button>
+            <button
+              className="bg-gray-300 px-3 py-1 rounded"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </div>
-    ));
+      ),
+      {
+        duration: 3000,
+      }
+    );
   };
 
   useEffect(() => {
@@ -62,6 +69,10 @@ const Category = () => {
       mounted.current = true;
     }
   }, []);
+  const indexOfLast = currentPage * categoryPerPage;
+  const indexOfFirst = indexOfLast - categoryPerPage;
+  const currentCategory = categories.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(categories.length / categoryPerPage);
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6 sm:flex-row  gap-4">
@@ -91,7 +102,7 @@ const Category = () => {
             </thead>
 
             <tbody className="text-gray-800">
-              {categories.length === 0 ? (
+              {currentCategory.length === 0 ? (
                 <tr>
                   <td
                     colSpan="6"
@@ -101,7 +112,7 @@ const Category = () => {
                   </td>
                 </tr>
               ) : (
-                categories.map((d, index) => (
+                currentCategory.map((d, index) => (
                   <tr
                     key={d.id}
                     className={`border-t border-gray-200 hover:bg-gray-50 transition ${
@@ -150,6 +161,23 @@ const Category = () => {
           </table>
         </div>
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {[...Array(totalPages)].map((_, pageIndex) => (
+            <button
+              key={pageIndex}
+              onClick={() => setCurrentPage(pageIndex + 1)}
+              className={`px-4 py-2 rounded-lg border transition ${
+                currentPage === pageIndex + 1
+                  ? "bg-emerald-600 text-white"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {pageIndex + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
