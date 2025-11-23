@@ -68,13 +68,15 @@ const AdminProduct = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800">Products</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+          Products
+        </h2>
 
         <Link
           to="/admin/product/create"
-          className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
+          className="bg-emerald-600 text-white px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg shadow hover:bg-emerald-700 transition whitespace-nowrap"
         >
-          + Add Product
+          + Add
         </Link>
       </div>
 
@@ -83,7 +85,7 @@ const AdminProduct = () => {
           <table className="w-full border-collapse">
             <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
               <tr>
-                <th className="p-4 text-center">ID</th>
+                <th className="p-4 text-center">S.N</th>
                 <th className="p-4 text-center">Image</th>
                 <th className="p-4 text-center">Title</th>
                 <th className="p-4 text-center">Price</th>
@@ -110,7 +112,7 @@ const AdminProduct = () => {
                       index % 2 === 0 ? "bg-white" : "bg-gray-50"
                     }`}
                   >
-                    <td className="p-4 text-center font-medium">{p.id}</td>
+                    <td className="p-4 text-center font-medium">{index + 1}</td>
 
                     <td className="p-4 text-center flex justify-center">
                       <img

@@ -43,7 +43,9 @@ const Support = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800">Tickets</h2>
+         <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+          Support Ticket
+        </h2>
 
         {/* <Link
           to="/admin/review/create"

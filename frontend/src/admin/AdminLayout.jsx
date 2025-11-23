@@ -40,7 +40,7 @@ const AdminLayout = () => {
             </Link>
           </li>
            <li>
-            <Link onClick={() => setOpen(false)} to="/admin/category">
+            <Link onClick={() => setOpen(false)} to="/admin/categories">
               Category
             </Link>
           </li>
