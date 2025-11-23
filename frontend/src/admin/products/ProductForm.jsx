@@ -15,6 +15,8 @@ const ProductForm = () => {
     category: "",
     description: "",
     image: null,
+    is_featured: "",
+    status: "",
   });
 
   const [preview, setPreview] = useState("");
@@ -44,6 +46,8 @@ const ProductForm = () => {
         category: res.data.category,
         description: res.data.description,
         image: null,
+        is_featured: res.data.is_featured,
+        status: res.data.status,
       });
       setPreview(res.data.image);
     } catch (error) {
@@ -71,6 +75,8 @@ const ProductForm = () => {
       fd.append("stock", formData.stock);
       fd.append("category", formData.category);
       fd.append("description", formData.description);
+      fd.append("is_featured", formData.is_featured);
+      fd.append("status", formData.status);
 
       if (formData.image) fd.append("image", formData.image);
 
@@ -169,6 +175,61 @@ const ProductForm = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <span className="text-sm font-medium text-gray-700">
+                    Featured:
+                  </span>
+                  <input
+                    type="checkbox"
+                    name="is_featured"
+                    checked={formData.is_featured}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        is_featured: e.target.checked,
+                      })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div
+                    className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
+                  transition-colors"
+                  >
+                    <div
+                      className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </div>
+                </label>
+              </div>
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <span className="text-sm font-medium text-gray-700">
+                    Status:
+                  </span>
+                  <input
+                    type="checkbox"
+                    name="status"
+                    checked={formData.status}
+                    onChange={(e) =>
+                      setFormData({ ...formData, status: e.target.checked })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div
+                    className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
+                  transition-colors"
+                  >
+                    <div
+                      className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </div>
+                </label>
               </div>
             </div>
 

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 import { useSearch } from "../../context/SearchCOntext";
+import dummy from  "../../assets/dummy.png";
+
 
 const AdminProduct = () => {
   const { globalSearch } = useSearch();
@@ -82,18 +84,17 @@ const AdminProduct = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
-          Products
-        </h2>
-
-        <Link
-          to="/admin/product/create"
-          className="bg-emerald-600 text-white px-3 sm:px-5 py-1.5 sm:py-2 text-sm sm:text-base rounded-lg shadow hover:bg-emerald-700 transition whitespace-nowrap"
-        >
-          + Add
-        </Link>
-      </div>
+           <div className="flex justify-between items-center mb-6">
+             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+               Products
+             </h2>
+             <Link
+               to="/admin/product/create"
+               className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
+             >
+               + Add
+             </Link>
+           </div>
 
       <div className="rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
@@ -105,6 +106,8 @@ const AdminProduct = () => {
                 <th className="p-4 text-center">Title</th>
                 <th className="p-4 text-center">Price</th>
                 <th className="p-4 text-center">Stock</th>
+                <th className="p-4 text-center">Featured</th>
+                <th className="p-4 text-center">Status</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -131,7 +134,7 @@ const AdminProduct = () => {
 
                     <td className="p-4 text-center flex justify-center">
                       <img
-                        src={p.image}
+                        src={p.image?? dummy}
                         alt="product"
                         className="w-14 h-14 object-cover rounded"
                       />
@@ -140,6 +143,24 @@ const AdminProduct = () => {
                     <td className="p-4 text-center">{p.name}</td>
                     <td className="p-4 text-center">Rs. {p.price}</td>
                     <td className="p-4 text-center">{p.stock}</td>
+                    <td className="p-4 text-center">
+                      <span
+                        className={`px-3 py-1 rounded-full text-white text-sm ${
+                          p.is_featured ? "bg-emerald-600" : "bg-gray-500"
+                        }`}
+                      >
+                        {p.is_featured ? "Yes" : "No"}
+                      </span>
+                    </td>
+                      <td className="p-4 text-center">
+                      <span
+                        className={`px-3 py-1 rounded-full text-white text-sm ${
+                          p.status ? "bg-emerald-600" : "bg-gray-500"
+                        }`}
+                      >
+                        {p.status ? "Yes" : "No"}
+                      </span>
+                    </td>
 
                     <td className="p-4">
                       <div className="flex justify-center items-center gap-3">
