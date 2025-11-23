@@ -68,6 +68,10 @@ const AdminLayout = () => {
             <Link onClick={() => setOpen(false)} to="/admin/user-address">
               Address
             </Link>
+          </li> <li>
+            <Link onClick={() => setOpen(false)} to="/admin/wishlists">
+              WishList
+            </Link>
           </li>
           <li>
             <Link onClick={() => setOpen(false)} to="/admin/payments">
@@ -126,6 +130,11 @@ const AdminLayout = () => {
           <li>
             <Link to="user-address" className="block hover:text-white">
               Address
+            </Link>
+          </li>
+          <li>
+            <Link to="wishlists" className="block hover:text-white">
+              WishList
             </Link>
           </li>
           <li>

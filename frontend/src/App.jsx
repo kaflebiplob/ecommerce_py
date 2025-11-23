@@ -32,6 +32,7 @@ import UserForm from "./admin/users/UserForm";
 import Order from "./admin/orders/Order";
 import AdminDashboard from "./admin/AdminDashboard";
 import Category from "./admin/category/Category";
+import Wishlists from "./admin/wishlist/Wishlist";
 import CategoryForm from "./admin/category/CategoryForm";
 import AdminRoute from "./components/AdminRoute";
 import Forbidden from "./components/Forbidden";
@@ -92,6 +93,7 @@ function App() {
           <Route path="category/edit/:id" element={<CategoryForm />} />
 
           <Route path="payments" element={<Payment />} />
+          <Route path="wishlists" element={<Wishlists />}/>
         </Route>
       </Routes>
       {/* <Footer/> */}
