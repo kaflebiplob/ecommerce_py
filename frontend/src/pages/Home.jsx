@@ -15,8 +15,8 @@ const Home = () => {
         const response = await api.get("products/");
         const data = response.data;
 
-        console.log("API Base URL:", import.meta.env.VITE_API_URL);
-        console.log("API Response:", data);
+        // console.log("API Base URL:", import.meta.env.VITE_API_URL);
+        // console.log("API Response:", data);
 
         if (Array.isArray(data)) {
           setProducts(data);

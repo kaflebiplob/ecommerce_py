@@ -7,7 +7,7 @@ const Discount = () => {
   const [discount, setDiscount] = useState([]);
   const mounted = useRef(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const discountPerPage = 1;
+  const discountPerPage = 10;
 
   const loadDiscounts = async () => {
     try {

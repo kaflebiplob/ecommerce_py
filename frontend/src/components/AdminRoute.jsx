@@ -4,8 +4,8 @@ import { Navigate } from "react-router-dom";
 const AdminRoute = ({ children }) => {
   const token = localStorage.getItem("access");
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
-  console.log(token);
+  // console.log(user);
+  // console.log(token);
 
   if (!token) return <Navigate to="/login" replace />;
 

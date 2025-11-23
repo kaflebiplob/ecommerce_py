@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const categoryPerPage = 1;
+  const categoryPerPage = 10;
   const mounted = useRef(false);
   const navigate = useNavigate();
   const loadCategories = async () => {

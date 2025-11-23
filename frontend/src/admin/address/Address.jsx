@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const Address = () => {
   const [address, setAddress] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const addressesPerPage = 1;
+  const addressesPerPage = 10;
   const mounted = useRef(false);
 
   const loadAddress = async () => {

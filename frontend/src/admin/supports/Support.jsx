@@ -6,7 +6,7 @@ const Support = () => {
   const [ticket, setTicket] = useState([]);
   const mounted = useRef(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const supportPerPage = 1;
+  const supportPerPage = 10;
   const loadTicket = async () => {
     try {
       const res = await api.get("/admin/support/");
