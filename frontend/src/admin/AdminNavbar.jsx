@@ -1,13 +1,44 @@
-import React from "react";
-import { FiBell, FiSearch, FiUser } from "react-icons/fi";
+import React, { useState, useEffect, useRef } from "react";
+import { FiBell, FiSearch, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const AdminNavbar = () => {
-  return (
-    <div className="flex items-center justify-between w-full">
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
+  const handleProfile = () => {
+    navigate("/admin/profile");
+    setIsDropdownOpen(false);
+  };
+
+  return (
+    <div className="flex items-center justify-between w-full gap-3 sm:gap-4">
       {/* Search */}
-      <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 w-[300px]">
-        <FiSearch className="text-gray-500" />
+      <div className="flex items-center gap-2 sm:gap-3 bg-gray-100 rounded-full px-3 sm:px-4 py-2 flex-1 sm:flex-initial sm:w-[300px] max-w-md">
+        <FiSearch className="text-gray-500 text-base sm:text-lg flex-shrink-0" />
         <input
           type="text"
           placeholder="Search..."
@@ -16,15 +47,46 @@ const AdminNavbar = () => {
       </div>
 
       {/* Icons */}
-      <div className="flex items-center gap-6 text-gray-700">
-        <FiBell className="text-xl cursor-pointer hover:text-black" />
-        
-        <div className="flex items-center gap-2 cursor-pointer hover:text-black">
-          <FiUser className="text-xl" />
-          <span className="text-sm font-medium">Admin</span>
+      <div className="flex items-center gap-4 sm:gap-6 text-gray-700">
+        <FiBell className="text-lg sm:text-xl cursor-pointer hover:text-black transition" />
+
+        {/* User Dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <div
+            className="flex items-center gap-2 cursor-pointer hover:text-black transition"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <FiUser className="text-lg sm:text-xl" />
+            <span className="text-sm font-medium hidden sm:inline">Admin</span>
+          </div>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
+              {/* Profile */}
+              <button
+                onClick={handleProfile}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+              >
+                <FiSettings className="text-base" />
+                <span>Profile</span>
+              </button>
+
+              {/* Divider */}
+              <div className="border-t border-gray-200 my-1"></div>
+
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition"
+              >
+                <FiLogOut className="text-base" />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
     </div>
   );
 };

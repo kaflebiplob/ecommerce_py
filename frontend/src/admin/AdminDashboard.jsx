@@ -10,9 +10,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
 import { Line, Bar, Pie } from "react-chartjs-2";
 import api from "../api/api";
+import { FiUsers, FiPackage, FiShoppingCart, FiStar } from "react-icons/fi";
 
 ChartJS.register(
   LineElement,
@@ -38,9 +38,11 @@ const AdminDashboard = () => {
   const [barChart, setBarChart] = useState(null);
   const [orderStatusChart, setOrderStatusChart] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const loadDashboard = async () => {
     try {
+      setLoading(true);
       const response = await api.get("/admin/dashboard/stats/");
       const data = response.data;
 
@@ -113,6 +115,8 @@ const AdminDashboard = () => {
       });
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,80 +124,213 @@ const AdminDashboard = () => {
     loadDashboard();
   }, []);
 
+  const statCards = [
+    {
+      title: "Total Users",
+      value: stats.total_users,
+      icon: FiUsers,
+      color: "bg-gradient-to-br from-emerald-500 to-emerald-600",
+      lightColor: "bg-emerald-100",
+      iconColor: "text-emerald-600",
+    },
+    {
+      title: "Total Products",
+      value: stats.total_products,
+      icon: FiPackage,
+      color: "bg-gradient-to-br from-indigo-500 to-indigo-600",
+      lightColor: "bg-indigo-100",
+      iconColor: "text-indigo-600",
+    },
+    {
+      title: "Total Orders",
+      value: stats.total_orders,
+      icon: FiShoppingCart,
+      color: "bg-gradient-to-br from-orange-500 to-orange-600",
+      lightColor: "bg-orange-100",
+      iconColor: "text-orange-600",
+    },
+    {
+      title: "Total Reviews",
+      value: stats.total_reviews,
+      icon: FiStar,
+      color: "bg-gradient-to-br from-purple-500 to-purple-600",
+      lightColor: "bg-purple-100",
+      iconColor: "text-purple-600",
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-10">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="p-5 bg-emerald-600 text-white rounded-lg">
-          <h2>Total Users</h2>
-          <p className="text-3xl">{stats.total_users}</p>
+    <div className="space-y-6 p-4 sm:p-6">
+      
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {statCards.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
+                <p className="text-3xl font-bold text-gray-800">{stat.value}</p>
+              </div>
+              <div className={`${stat.lightColor} p-3 rounded-lg`}>
+                <stat.icon className={`text-2xl ${stat.iconColor}`} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Monthly Orders - Large Chart */}
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm lg:col-span-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            Monthly Orders
+          </h3>
+          <div className="h-64 sm:h-80">
+            {salesChart && <Line data={salesChart} options={{ maintainAspectRatio: false }} />}
+          </div>
         </div>
 
-        <div className="p-5 bg-indigo-600 text-white rounded-lg">
-          <h2>Total Products</h2>
-          <p className="text-3xl">{stats.total_products}</p>
+        {/* Order Status - Pie Chart */}
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            Order Status
+          </h3>
+          <div className="h-64">
+            {orderStatusChart ? (
+              <Pie data={orderStatusChart} options={{ maintainAspectRatio: false }} />
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                No Data Available
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="p-5 bg-orange-600 text-white rounded-lg">
-          <h2>Total Orders</h2>
-          <p className="text-3xl">{stats.total_orders}</p>
+        {/* New Users - Line Chart */}
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm lg:col-span-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            New Users per Month
+          </h3>
+          <div className="h-64 sm:h-80">
+            {userChart && <Line data={userChart} options={{ maintainAspectRatio: false }} />}
+          </div>
         </div>
 
-        <div className="p-5 bg-purple-600 text-white rounded-lg">
-          <h2>Total Reviews</h2>
-          <p className="text-3xl">{stats.total_reviews}</p>
+        {/* Orders & Users Comparison - Bar Chart */}
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm lg:col-span-3">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            Orders & Users Comparison
+          </h3>
+          <div className="h-64 sm:h-80">
+            {barChart && <Bar data={barChart} options={{ maintainAspectRatio: false }} />}
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow col-span-2">
-          <h3 className="text-xl mb-4">Monthly Orders</h3>
-          {salesChart && <Line data={salesChart} />}
+      {/* Recent Orders Table */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 sm:p-6 border-b border-gray-200">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
+            Recent Orders
+          </h3>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-xl mb-4">Order Status</h3>
-          {orderStatusChart ? <Pie data={orderStatusChart} /> : "No Data"}
+        {/* Mobile View - Cards */}
+        <div className="block sm:hidden">
+          {recentOrders.length > 0 ? (
+            recentOrders.map((order) => (
+              <div key={order.id} className="p-4 border-b border-gray-200">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="font-semibold text-gray-800">#{order.id}</span>
+                  <span className="px-2 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded">
+                    {order.status}
+                  </span>
+                </div>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <p><span className="font-medium">User:</span> {order.user}</p>
+                  <p><span className="font-medium">Amount:</span> ${order.total_amount}</p>
+                  <p><span className="font-medium">Date:</span> {new Date(order.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center text-gray-500">
+              No recent orders
+            </div>
+          )}
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow col-span-2">
-          <h3 className="text-xl mb-4">New Users per Month</h3>
-          {userChart && <Line data={userChart} />}
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow col-span-3">
-          <h3 className="text-xl mb-4">Orders & Users Comparison</h3>
-          {barChart && <Bar data={barChart} />}
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow">
-        <h3 className="text-xl mb-4">Recent Orders</h3>
-
-        <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="p-2 text-left">ID</th>
-              <th className="p-2 text-left">User</th>
-              <th className="p-2 text-left">Amount</th>
-              <th className="p-2 text-left">Status</th>
-              <th className="p-2 text-left">Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {recentOrders.map((o) => (
-              <tr key={o.id} className="border-b">
-                <td className="p-2">#{o.id}</td>
-                <td className="p-2">{o.user}</td>
-                <td className="p-2">${o.total_amount}</td>
-                <td className="p-2">{o.status}</td>
-                <td className="p-2">
-                  {new Date(o.created_at).toLocaleDateString()}
-                </td>
+        {/* Desktop View - Table */}
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Order ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      #{order.id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      {order.user}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                      Rs {order.total_amount}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded">
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                    No recent orders
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

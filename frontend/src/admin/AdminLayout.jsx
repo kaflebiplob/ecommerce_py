@@ -29,6 +29,11 @@ const AdminLayout = () => {
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
+           <li>
+            <Link onClick={() => setOpen(false)} to="/admin">
+              Dashboard
+            </Link>
+          </li>
           <li>
             <Link onClick={() => setOpen(false)} to="/admin/users">
               Users
@@ -79,10 +84,15 @@ const AdminLayout = () => {
 
       <div className="hidden md:block w-[220px] bg-gray-900 text-white p-6 shadow-lg h-full">
         <h2 className="text-xl font-semibold border-b border-gray-700 pb-3">
-          <Link to="/">Admin Panel</Link>
+          <Link to="/admin">Admin Panel</Link>
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
+           {/* <li>
+            <Link to="dashboard" className="block hover:text-white">
+              Dashboard
+            </Link>
+          </li> */}
            <li>
             <Link to="users" className="block hover:text-white">
               Users

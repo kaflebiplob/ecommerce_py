@@ -14,15 +14,17 @@ const ReviewForm = () => {
   });
   const navigate = useNavigate();
   const { id } = useParams();
+
   const loadProducts = async () => {
     try {
       const res = await api.get("/admin/products/");
       setProduct(res.data);
     } catch (err) {
-      toast.error("failed fo fetch the reviews", err);
+      toast.error("failed to fetch the reviews", err);
       console.log("failed to fetch reviews", err);
     }
   };
+
   const loadUsers = async () => {
     try {
       const res = await api.get("/admin/users/");
@@ -47,6 +49,7 @@ const ReviewForm = () => {
       toast.error("failed!!");
     }
   };
+
   useEffect(() => {
     loadProducts();
     loadUsers();
@@ -54,21 +57,23 @@ const ReviewForm = () => {
       loadReview();
     }
   }, [id]);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (id) {
         await api.put(`/admin/reviews/${id}/`, formData);
-        toast.success("succesfully updated review");
+        toast.success("successfully updated review");
       } else {
         await api.post("/admin/reviews/", formData);
-        toast.success("review created succesfully");
+        toast.success("review created successfully");
       }
       navigate("/admin/reviews");
     } catch (error) {
@@ -76,92 +81,117 @@ const ReviewForm = () => {
       console.error("failed to process review", error);
     }
   };
+
   return (
-    <div className="mx-auto p-5 bg-white rounded">
-      <h2 className="text-2xl font-semibold mb-4">
-        {id ? "Edit Review" : "Create review"}
-      </h2>
-      <form
-        action=""
-        onSubmit={handleSubmit}
-        className="space-y-3 bg-white p-5 rounded-lg"
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="" className="font-medium text-gray-700">
-              Product
-            </label>
-            <select
-              name="product_id"
-              id=""
-              onChange={handleChange}
-              value={formData.product_id}
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="">Select Product</option>
-              {product.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="" className="text-gray-700 font-medium">
-              User
-            </label>
-            <select
-              name="user_id"
-              onChange={handleChange}
-              value={formData.user_id}
-              id=""
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 "
-            >
-              <option value="">Select User</option>
-              {user.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.username}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="">Rating</label>
-            <input
-              type="text"
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              name="rating"
-              onChange={handleChange}
-              value={formData.rating}
-            />
+    <div className="sm:py-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        
+        <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            {id ? "Edit Review" : "Create Review"}
+          </h2>
+        </div>
+
+        <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
+          <div className="space-y-5">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product
+                </label>
+                <select
+                  name="product_id"
+                  value={formData.product_id}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                >
+                  <option value="">Select Product</option>
+                  {product.map((item) => (
+                    <option value={item.id} key={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  User
+                </label>
+                <select
+                  name="user_id"
+                  value={formData.user_id}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                >
+                  <option value="">Select User</option>
+                  {user.map((item) => (
+                    <option value={item.id} key={item.id}>
+                      {item.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Rating
+                </label>
+                <input
+                  type="number"
+                  name="rating"
+                  value={formData.rating}
+                  onChange={handleChange}
+                  min="1"
+                  max="5"
+                  placeholder="1-5"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Comment
+              </label>
+              <textarea
+                name="comment"
+                value={formData.comment}
+                onChange={handleChange}
+                rows={5}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+                focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
+              ></textarea>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="flex-1 bg-emerald-600 text-white py-2.5 px-6 rounded-lg 
+                font-medium hover:bg-emerald-700 transition-colors shadow-sm"
+              >
+                {id ? "Update" : "Create"}
+              </button>
+              
+              <Link
+                to="/admin/reviews"
+                className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
+                font-medium hover:bg-red-600 transition-colors shadow-sm text-center"
+              >
+                Cancel
+              </Link>
+            </div>
+
           </div>
         </div>
-        <div>
-          <label htmlFor="" className="text-gray-700 font-medium">
-            Comment
-          </label>
-          <textarea
-            name="comment"
-            id=""
-            onChange={handleChange}
-            value={formData.comment}
-            rows={5}
-            cols={5}
-            className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          ></textarea>
-        </div>
-        <div className="flex gap-4 items-center">
-          <button
-            type="submit"
-            className="bg-emerald-500 text-white hover:bg-emerald-700 transition text-md font-medium py-2 px-4 rounded-lg"
-          >
-            {id ? "Update" : "Create"}
-          </button>
-          <div className="bg-red-500 text-white px-4  hover:bg-red-700 transition text-md font-medium py-2 rounded-lg">
-            <Link to="/admin/reviews">Cancel</Link>
-          </div>
-        </div>
-      </form>
+
+      </div>
     </div>
   );
 };

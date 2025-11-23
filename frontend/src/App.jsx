@@ -33,6 +33,8 @@ import Order from "./admin/orders/Order";
 import AdminDashboard from "./admin/AdminDashboard";
 import Category from "./admin/category/Category";
 import CategoryForm from "./admin/category/CategoryForm";
+import AdminRoute from "./components/AdminRoute";
+import Forbidden from "./components/Forbidden";
 // import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
@@ -53,7 +55,17 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/order-failure" element={<OrderFailure />} />
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/403" element={<Forbidden />}/>
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route path="" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProduct />} />
           <Route path="product/create" element={<ProductForm />} />
           <Route path="product/edit/:id" element={<ProductForm />} />
@@ -67,20 +79,19 @@ function App() {
           <Route path="user-address" element={<Address />} />
           {/* this route is for the user */}
           <Route path="users" element={<User />} />
-          <Route path="user/create" element={<UserForm />}/>
-          <Route path="user/edit/:id" element={<UserForm />}/>
+          <Route path="user/create" element={<UserForm />} />
+          <Route path="user/edit/:id" element={<UserForm />} />
           {/* this route is for orders */}
           <Route path="orders" element={<Order />} />
           {/* <Route path="order/create" element={<OrderForm />}/> */}
           {/* <Route path="order/edit/:id" element={<OrderForm />}/> */}
 
           {/* this route is for category */}
-          <Route path="categories" element={<Category />}/>
-          <Route path="category/create" element={<CategoryForm />}/>
-          <Route path="category/edit/:id" element={<CategoryForm />}/>
+          <Route path="categories" element={<Category />} />
+          <Route path="category/create" element={<CategoryForm />} />
+          <Route path="category/edit/:id" element={<CategoryForm />} />
 
           <Route path="payments" element={<Payment />} />
-          <Route path="" element={<AdminDashboard />}/>
         </Route>
       </Routes>
       {/* <Footer/> */}

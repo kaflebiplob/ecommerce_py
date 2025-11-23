@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect, children } from "react";
+// ============= AuthContext.jsx =============
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -12,10 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [Loading, setLoading] = useState(false);
 
   // Django backend API Url
-
   const API_URL = "http://localhost:8000/api";
 
-    const register = async (username, email, password) => {
+  const register = async (username, email, password) => {
     try {
       setLoading(true);
       const response = await axios.post(`${API_URL}/auth/register/`, {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         password,
       });
       if (response.status === 201 || response.data?.id) {
-        return { success: true, message: "User Registration Succesfull" };
+        return { success: true, message: "User Registration Successful" };
       } else {
         return { success: false, message: "Unexpected response from server" };
       }
@@ -51,11 +51,20 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.data?.access) {
-        const userData = response.data.user || { username };
+        const userData = {
+          username: response.data.user?.username || response.data.username || username,
+          is_staff: response.data.user?.is_staff || response.data.is_staff || false,
+          is_superuser: response.data.user?.is_superuser || response.data.is_superuser || false,
+          email: response.data.user?.email || response.data.email || "",
+          id: response.data.user?.id || response.data.id || null,
+        };
+
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("access", response.data.access);
         localStorage.setItem("refresh", response.data.refresh);
+
+        console.log("User data saved:", userData);
 
         return { success: true };
       } else {
@@ -82,7 +91,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("refresh");
   };
 
-  
   useEffect(() => {
     const refreshToken = async () => {
       const refresh = localStorage.getItem("refresh");
@@ -99,9 +107,10 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    const interval = setInterval(refreshToken, 4 * 60 * 1000); // every 4 min
+    const interval = setInterval(refreshToken, 4 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
+
   return (
     <AuthContext.Provider
       value={{ user, login, register, logout, Loading, setUser }}

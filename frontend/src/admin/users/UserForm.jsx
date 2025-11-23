@@ -14,9 +14,9 @@ const UserForm = () => {
   });
   const { id } = useParams();
   const navigate = useNavigate();
+
   const loadUsers = async () => {
     const res = await api.get(`/admin/users/${id}/`);
-    // setFormData(res.data);
     setFormData({
       username: res.data.username,
       email: res.data.email,
@@ -26,11 +26,13 @@ const UserForm = () => {
       is_active: res.data.is_active,
     });
   };
+
   useEffect(() => {
     if (id) {
       loadUsers();
     }
   }, [id]);
+
   const handleChange = (e) => {
     let { name, value } = e.target;
 
@@ -40,16 +42,16 @@ const UserForm = () => {
 
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("formdata:",formData);
     try {
       if (id) {
         await api.put(`/admin/users/${id}/`, formData);
-        toast.success("user updated succesfully");
+        toast.success("user updated successfully");
       } else {
         await api.post("/admin/users/", formData);
-        toast.success("user added succesfully");
+        toast.success("user added successfully");
       }
       navigate("/admin/users");
     } catch (error) {
@@ -57,144 +59,161 @@ const UserForm = () => {
       console.log(error);
     }
   };
+
   return (
-    <div className="mx-auto p-5 bg-white  rounded">
-      <h2 className="text-2xl font-semibold mb-4">
-        {id ? "Edit User" : "Create User"}
-        {/* Create User */}
-      </h2>
-      <form
-        className="space-y-3 bg-white p-5 rounded-lg"
-        action=""
-        onSubmit={handleSubmit}
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="" className="font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              type="text"
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Username (letters, numbers, underscore only)"
-            />
-            <span className="text-gray-500">
-              letters, numbers, underscore only no gaps
-            </span>
-          </div>
-          <div>
-            <label htmlFor="" className="font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="" className="font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              value={formData.password}
-              name="password"
-              onChange={handleChange}
-              className="mt-1 p-2 border border-gray-300 rounded-lg w-full text-sm  focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <label className="inline-flex items-center cursor-pointer mt-1">
-              is_superuser:
-              <input
-                type="checkbox"
-                name="is_superuser"
-                checked={formData.is_superuser}
-                onChange={(e) =>
-                  setFormData({ ...formData, is_superuser: e.target.checked })
-                }
-                className="sr-only peer"
-              />
-              <div
-                className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 
-                rounded-full peer peer-checked:bg-emerald-600 relative transition"
-              >
-                <div
-                  className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full 
-                 transition peer-checked:translate-x-5"
-                ></div>
+    <div className="sm:py-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        
+        <div className="bg-white sm:rounded-lg sm:shadow-sm p-6 mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            {id ? "Edit User" : "Create User"}
+          </h2>
+        </div>
+
+        <div className="bg-white sm:rounded-lg sm:shadow-sm p-6">
+          <div className="space-y-5">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="Username (letters, numbers, underscore only)"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
+                  required
+                />
+                <span className="text-xs text-gray-500 mt-1 block">
+                  Letters, numbers, underscore only - no spaces
+                </span>
               </div>
-            </label>
-          </div>
-          <div className="flex items-center gap-4">
-            <label className="inline-flex items-center cursor-pointer mt-1">
-              is_staff:
-              <input
-                type="checkbox"
-                name="is_staff"
-                checked={formData.is_staff}
-                onChange={(e) =>
-                  setFormData({ ...formData, is_staff: e.target.checked })
-                }
-                className="sr-only peer"
-              />
-              <div
-                className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 
-                rounded-full peer peer-checked:bg-emerald-600 relative transition"
-              >
-                <div
-                  className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full 
-                 transition peer-checked:translate-x-5"
-                ></div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none"
+                  required
+                />
               </div>
-            </label>
-          </div>
-          <div className="flex items-center gap-4">
-            <label className="inline-flex items-center cursor-pointer mt-1">
-              Status:
-              <input
-                type="checkbox"
-                name="is_active"
-                checked={formData.is_active}
-                onChange={(e) =>
-                  setFormData({ ...formData, is_active: e.target.checked })
-                }
-                className="sr-only peer"
-              />
-              <div
-                className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-500 
-                rounded-full peer peer-checked:bg-emerald-600 relative transition"
-              >
-                <div
-                  className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full 
-                 transition peer-checked:translate-x-5"
-                ></div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder={id ? "Leave blank to keep current" : "Enter password"}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                />
               </div>
-            </label>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-2">
+              
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <span className="text-sm font-medium text-gray-700">Superuser:</span>
+                  <input
+                    type="checkbox"
+                    name="is_superuser"
+                    checked={formData.is_superuser}
+                    onChange={(e) =>
+                      setFormData({ ...formData, is_superuser: e.target.checked })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
+                  transition-colors">
+                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  </div>
+                </label>
+              </div>
+
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <span className="text-sm font-medium text-gray-700">Staff:</span>
+                  <input
+                    type="checkbox"
+                    name="is_staff"
+                    checked={formData.is_staff}
+                    onChange={(e) =>
+                      setFormData({ ...formData, is_staff: e.target.checked })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
+                  transition-colors">
+                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  </div>
+                </label>
+              </div>
+
+              <div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <span className="text-sm font-medium text-gray-700">Active:</span>
+                  <input
+                    type="checkbox"
+                    name="is_active"
+                    checked={formData.is_active}
+                    onChange={(e) =>
+                      setFormData({ ...formData, is_active: e.target.checked })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div className="relative w-11 h-6 bg-gray-300 rounded-full peer 
+                  peer-checked:bg-emerald-600 peer-focus:ring-2 peer-focus:ring-emerald-500 
+                  transition-colors">
+                    <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full 
+                    shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="flex-1 bg-emerald-600 text-white py-2.5 px-6 rounded-lg 
+                font-medium hover:bg-emerald-700 transition-colors shadow-sm"
+              >
+                {id ? "Update" : "Create"}
+              </button>
+              
+              <Link
+                to="/admin/users"
+                className="flex-1 bg-red-500 text-white py-2.5 px-6 rounded-lg 
+                font-medium hover:bg-red-600 transition-colors shadow-sm text-center"
+              >
+                Cancel
+              </Link>
+            </div>
+
           </div>
         </div>
-        <div className="flex items-center gap-4 ">
-          <button
-            type="submit"
-            className="bg-emerald-600 text-white py-2 px-4 cursor-pointer
-         font-medium text-md rounded-lg hover:bg-emerald-700 transition"
-          >
-            {id ? "Update" : "Create"}
-            {/* Create */}
-          </button>
-          <div className="bg-red-500 px-4 text-white hover:bg-red-700 transition text-md font-medium py-2 rounded-lg">
-            <Link to="/admin/users" className="cursor-pointer">
-              Cancel
-            </Link>
-          </div>
-        </div>
-      </form>
+
+      </div>
     </div>
   );
 };
