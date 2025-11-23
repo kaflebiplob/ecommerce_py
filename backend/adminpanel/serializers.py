@@ -136,6 +136,8 @@ class UserAdminSerializer(serializers.ModelSerializer):
         return instance
     
 class WishlistAdminSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    product_name = serializers.CharField(source='product.name', read_only=True)
     class Meta:
         model=Wishlist
-        fields= '__all__'
+        fields= ['id', 'username', 'product_name', 'added_at', 'user', 'product']
