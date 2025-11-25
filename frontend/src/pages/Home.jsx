@@ -4,7 +4,7 @@ import api from "../api/api";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import dummy from  "../assets/dummy.png";
+import dummy from "../assets/dummy.png";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -77,9 +77,7 @@ const Home = () => {
                 >
                   <Link to={`/product/${product.id}`}>
                     <img
-                      src={
-                        product.image ? product.image : dummy
-                      }
+                      src={product.image ? product.image : dummy}
                       alt={product.name}
                       className="w-full h-52 object-cover rounded-xl mb-4"
                     />
@@ -95,12 +93,19 @@ const Home = () => {
                     <span className="text-emerald-600 font-semibold text-lg">
                       ₹{product.price}
                     </span>
-                    <Link
-                      to="/cart"
-                      className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 transition"
-                    >
-                      Add to Cart
-                    </Link>
+
+                    {product.stock <= 0 ? (
+                      <span className="text-red-500 text-sm font-medium">
+                        Out of Stock
+                      </span>
+                    ) : (
+                      <Link
+                        to="/cart"
+                        className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800"
+                      >
+                        Add to Cart
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}

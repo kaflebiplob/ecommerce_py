@@ -15,6 +15,7 @@ const ProductDetail = () => {
 
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
+  const [wishlistId, setWishlistId] = useState(null); 
   const [rating, setRating] = useState(0);
 
   useEffect(() => {
@@ -22,17 +23,29 @@ const ProductDetail = () => {
       try {
         const response = await api.get(`products/${id}/`);
         setProduct(response.data);
-
         const reviewResponse = await api.get(`/reviews/?product_id=${id}`);
-        if (reviewResponse.data && reviewResponse.data.length > 0) {
+        if (reviewResponse.data?.length > 0) {
           setRating(reviewResponse.data[0].rating);
         }
+
+        // Fetch wishlist and match product
+        const wishlistRes = await api.get("/wishlist/");
+        const foundItem = wishlistRes.data.find(
+          (item) => item.product.id === parseInt(id)
+        );
+
+        if (foundItem) {
+          setWishlist(true);
+          setWishlistId(foundItem.id); // save wishlist item id
+        }
+
       } catch (error) {
-        console.error("Failed to fetch the product", error);
+        console.error("Failed to fetch product", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProduct();
   }, [id]);
 
@@ -45,8 +58,6 @@ const ProductDetail = () => {
       </div>
     );
   }
-
-  // const toggleWishlist = () => setWishlist(!wishlist);
 
   const incrementQuantity = () => {
     if (product.stock && quantity < product.stock) {
@@ -66,22 +77,28 @@ const ProductDetail = () => {
       });
       setRating(newRating);
       toast.success("Rating submitted!");
-    } catch (error) {
-      toast.error("failed to give rating");
-      console.log(error);
+    } catch {
+      toast.error("Failed to give rating");
     }
   };
 
   const toggleWishlist = async () => {
     try {
       if (!wishlist) {
-        await api.post("/wishlist/", { product_id: product.id });
+        // ADD
+        const res = await api.post("/wishlist/", { product_id: product.id });
+        setWishlist(true);
+        setWishlistId(res.data.id); // store new wishlist_id
+        toast.success("Added to wishlist");
       } else {
-        await api.delete(`/wishlist/delete/${product.id}/`);
+        // REMOVE using wishlistId
+        await api.delete(`/wishlist/${wishlistId}/`);
+        setWishlist(false);
+        setWishlistId(null);
+        toast.success("Removed from wishlist");
       }
-      setWishlist(!wishlist); 
     } catch (error) {
-      console.error("Failed to update wishlist", error);
+      toast.error("Wishlist error");
     }
   };
 
@@ -91,23 +108,13 @@ const ProductDetail = () => {
 
       <div className="bg-gray-50 py-16 px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          <div className="relative flex justify-center">
+          
+          <div className="flex justify-center">
             <img
               src={product.image || dummyImage}
               alt={product.name}
               className="w-full max-w-md h-96 object-cover rounded-2xl shadow"
             />
-            <button
-              onClick={toggleWishlist}
-              className="absolute top-4 right-4 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-            >
-              <FiHeart
-                className={`text-2xl ${
-                  wishlist ? "text-red-500" : "text-gray-400"
-                }`}
-              />
-            </button>
-            
           </div>
 
           <div>
@@ -146,37 +153,64 @@ const ProductDetail = () => {
               <p className="text-sm text-red-500 mb-4">Out of stock</p>
             )}
 
-            <div className="flex items-center gap-3 mb-6">
-              <button
-                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                onClick={decrementQuantity}
-              >
-                -
-              </button>
-              <span className="text-lg font-medium">{quantity}</span>
-              <button
-                className={`px-3 py-1 rounded ${
-                  quantity < product.stock
-                    ? "bg-gray-200 hover:bg-gray-300"
-                    : "bg-gray-100 cursor-not-allowed"
-                }`}
-                onClick={incrementQuantity}
-                disabled={quantity >= product.stock}
-              >
-                +
-              </button>
-            </div>
+            {product.stock > 0 && (
+              <div className="flex items-center gap-3 mb-6">
+                <button
+                  className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                  onClick={decrementQuantity}
+                >
+                  -
+                </button>
+                <span className="text-lg font-medium">{quantity}</span>
+                <button
+                  className={`px-3 py-1 rounded ${
+                    quantity < product.stock
+                      ? "bg-gray-200 hover:bg-gray-300"
+                      : "bg-gray-100 cursor-not-allowed"
+                  }`}
+                  onClick={incrementQuantity}
+                  disabled={quantity >= product.stock}
+                >
+                  +
+                </button>
+              </div>
+            )}
 
-            <Link
-              to="/cart"
-              className={`inline-block px-5 py-2 rounded text-white transition ${
-                product.stock
-                  ? "bg-black hover:bg-gray-800"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-            >
-              {product.stock ? "Add to Cart" : "Out of Stock"}
-            </Link>
+            <div className="flex items-center gap-4 mt-6">
+              {!product.stock ? (
+                <button
+                  onClick={toggleWishlist}
+                  className="px-5 py-2 bg-white rounded-lg shadow flex items-center gap-2 hover:bg-gray-100"
+                >
+                  <FiHeart
+                    className={`text-xl ${
+                      wishlist ? "text-red-500 fill-red-500" : "text-gray-400"
+                    }`}
+                  />
+                  <span>Add to Wishlist</span>
+                </button>
+              ) : (
+                <>
+                  <Link
+                    to="/cart"
+                    className="inline-block px-5 py-2 rounded text-white bg-black hover:bg-gray-800 transition"
+                  >
+                    Add to Cart
+                  </Link>
+
+                  <button
+                    onClick={toggleWishlist}
+                    className="p-3 rounded-full hover:bg-gray-100"
+                  >
+                    <FiHeart
+                      className={`text-xl ${
+                        wishlist ? "text-red-500 fill-red-500" : "text-gray-600"
+                      }`}
+                    />
+                  </button>
+                </>
+              )}
+            </div>
 
             <div className="mt-8">
               <Link
@@ -186,6 +220,7 @@ const ProductDetail = () => {
                 ← Back to Products
               </Link>
             </div>
+
           </div>
         </div>
       </div>
