@@ -36,6 +36,7 @@ import Wishlists from "./admin/wishlist/Wishlist";
 import CategoryForm from "./admin/category/CategoryForm";
 import AdminRoute from "./components/AdminRoute";
 import Forbidden from "./components/Forbidden";
+import Contact from "./pages/Contact";
 // import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/order-failure" element={<OrderFailure />} />
         <Route path="/403" element={<Forbidden />}/>
+        <Route path="/contact" element={<Contact />}/>
 
         <Route
           path="/admin"
