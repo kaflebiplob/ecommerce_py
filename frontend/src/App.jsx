@@ -38,6 +38,7 @@ import AdminRoute from "./components/AdminRoute";
 import Forbidden from "./components/Forbidden";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
+import UserOrder from "./pages/Order";
 // import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
         <Route path="/403" element={<Forbidden />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/my-orders" element={<UserOrder />}/>
 
         <Route
           path="/admin"

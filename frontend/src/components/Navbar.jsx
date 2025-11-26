@@ -177,7 +177,7 @@ const Navbar = () => {
                   </Link>
 
                   <Link
-                    to="/orders"
+                    to="/my-orders"
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                   >
@@ -295,14 +295,14 @@ const Navbar = () => {
                   My Profile
                 </Link>
 
-                <Link
+                {/* <Link
                   to="/settings"
                   onClick={closeMobileMenu}
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition"
                 >
                   <i className="fa-solid fa-cog mr-3 text-gray-400"></i>
                   Settings
-                </Link>
+                </Link> */}
 
                 <button
                   onClick={handleLogout}
