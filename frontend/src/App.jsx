@@ -37,6 +37,7 @@ import CategoryForm from "./admin/category/CategoryForm";
 import AdminRoute from "./components/AdminRoute";
 import Forbidden from "./components/Forbidden";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
 // import OrderForm from "./admin/orders/OrderForm";
 
 function App() {
@@ -57,8 +58,9 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/order-failure" element={<OrderFailure />} />
-        <Route path="/403" element={<Forbidden />}/>
-        <Route path="/contact" element={<Contact />}/>
+        <Route path="/403" element={<Forbidden />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile />} />
 
         <Route
           path="/admin"
@@ -95,7 +97,7 @@ function App() {
           <Route path="category/edit/:id" element={<CategoryForm />} />
 
           <Route path="payments" element={<Payment />} />
-          <Route path="wishlists" element={<Wishlists />}/>
+          <Route path="wishlists" element={<Wishlists />} />
         </Route>
       </Routes>
       {/* <Footer/> */}

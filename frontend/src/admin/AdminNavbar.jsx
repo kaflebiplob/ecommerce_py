@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiBell, FiSearch, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useSearch } from "../context/SearchCOntext";
+import { useSearch } from "../context/SearchContext";
 
 const AdminNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
