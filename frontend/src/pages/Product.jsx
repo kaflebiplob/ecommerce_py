@@ -5,10 +5,25 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import dummyImage from "../assets/dummy.png";
+import toast from "react-hot-toast";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const handleAddToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.post("/cart/add/", {
+        product_id: productId,
+        quantity: 1,
+      });
+      toast.success("added to cart");
+    } catch (error) {
+      console.log(error);
+      toast.error("failed to add");
+    }
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,9 +62,7 @@ const Product = () => {
           className="w-full h-52 object-cover rounded-xl mb-4"
         />
 
-        <h3 className="text-lg font-semibold text-gray-800">
-          {product.name}
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
 
         <p className="text-gray-600 text-sm mt-2 line-clamp-2">
           {product.description?.slice(0, 60)}...
@@ -64,12 +77,12 @@ const Product = () => {
         {product.stock <= 0 ? (
           <span className="text-red-500 text-sm font-medium">Out of Stock</span>
         ) : (
-          <Link
-            to="/cart"
-            className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800"
+          <button
+            onClick={() => handleAddToCart(product.id)}
+            className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 cursor-pointer"
           >
             Add to Cart
-          </Link>
+          </button>
         )}
       </div>
     </div>

@@ -5,10 +5,26 @@ import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import dummy from "../assets/dummy.png";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const addToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await api.post("/cart/add/", {
+        product_id: productId,
+        quanitiy: 1,
+      });
+      toast.success("added to cart");
+    } catch (error) {
+      console.log(error);
+      toast.error("failed to add in cart");
+    }
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -99,12 +115,12 @@ const Home = () => {
                         Out of Stock
                       </span>
                     ) : (
-                      <Link
-                        to="/cart"
-                        className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800"
+                      <button
+                        onClick={() => addToCart(product.id)}
+                        className="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 cursor-pointer"
                       >
                         Add to Cart
-                      </Link>
+                      </button>
                     )}
                   </div>
                 </div>
