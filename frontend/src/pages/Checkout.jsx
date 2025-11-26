@@ -11,7 +11,6 @@ const Checkout = () => {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
 
-  // Form state
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -57,7 +56,6 @@ const Checkout = () => {
       return;
     }
 
-    // Basic form validation
     if (!formData.fullName || !formData.address || !formData.phone) {
       toast.error("Please fill in all required fields");
       return;
