@@ -54,7 +54,7 @@ const Wishlist = () => {
     <>
       <Navbar />
 
-      <div className="container mx-auto py-10 px-6">
+      <div className="container mx-auto py-10 px-6 min-h-[60vh]">
         <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
           Your Wishlist
         </h2>

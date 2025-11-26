@@ -93,7 +93,7 @@ const Cart = () => {
     <>
       <Navbar />
 
-      <div className="container mx-auto py-10 px-6">
+      <div className="container mx-auto py-10 px-6 min-h-[60vh]">
         <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
           Your Cart
         </h2>
@@ -138,19 +138,32 @@ const Cart = () => {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <input
-                      type="number"
-                      min={1}
-                      value={item.quantity}
-                      onChange={(e) =>
-                        updateQuantity(item.product.id, Number(e.target.value))
-                      }
-                      className="w-16 border rounded-lg p-1 text-center"
-                    />
+                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.product.id, item.quantity - 1)
+                        }
+                        disabled={item.quantity <= 1}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition font-bold text-gray-700"
+                      >
+                        -
+                      </button>
+                      <span className="px-6 py-2 bg-white font-medium text-gray-800 min-w-[60px] text-center">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.product.id, item.quantity + 1)
+                        }
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition font-bold text-gray-700"
+                      >
+                        +
+                      </button>
+                    </div>
 
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 font-medium transition"
                     >
                       Remove
                     </button>
@@ -159,16 +172,18 @@ const Cart = () => {
               ))}
             </div>
 
-            <div className="mt-8 flex justify-between items-center border-t pt-4">
-              <h3 className="text-xl font-semibold">
-                Total: ₹{totalPrice.toFixed(2)}
-              </h3>
+            <div className="mt-8 border-t pt-6">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50 rounded-lg p-6">
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Total: ₹{totalPrice.toFixed(2)}
+                </h3>
 
-              <Link to="/checkout">
-                <button className="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition">
-                  Proceed to Checkout
-                </button>
-              </Link>
+                <Link to="/checkout">
+                  <button className="bg-emerald-500 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition font-semibold shadow-md hover:shadow-lg">
+                    Proceed to Checkout
+                  </button>
+                </Link>
+              </div>
             </div>
           </>
         )}

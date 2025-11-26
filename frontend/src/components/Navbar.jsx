@@ -1,11 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import api from "../api/api";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
@@ -21,7 +23,10 @@ const Navbar = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -49,6 +54,34 @@ const Navbar = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+  const fetchCartCount = async () => {
+    if (user) {
+      try {
+        const response = await api.get("/cart/");
+        const items = response.data.items || [];
+        const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(totalCount);
+      } catch (error) {
+        console.log("Error fetching cart:", error);
+        setCartCount(0);
+      }
+    } else {
+      setCartCount(0);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartCount();
+  }, []);
+  useEffect(() => {
+    if (user) {
+      const interval = setInterval(() => {
+        fetchCartCount();
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   return (
     <nav className="bg-white border-b border-gray-200 text-gray-800 sticky top-0 z-50 shadow-sm">
@@ -58,7 +91,11 @@ const Navbar = () => {
             onClick={toggleMobileMenu}
             className="md:hidden text-gray-700 hover:text-emerald-600 transition"
           >
-            <i className={`fa-solid ${isMobileMenuOpen ? "fa-xmark" : "fa-bars"} text-xl`}></i>
+            <i
+              className={`fa-solid ${
+                isMobileMenuOpen ? "fa-xmark" : "fa-bars"
+              } text-xl`}
+            ></i>
           </button>
 
           <Link
@@ -93,9 +130,11 @@ const Navbar = () => {
             className="relative text-gray-700 hover:text-emerald-600 transition"
           >
             <i className="fa-solid fa-cart-shopping text-xl"></i>
-            <span className="absolute -top-2 -right-3 bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-              0
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-3 bg-emerald-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {cartCount}
+              </span>
+            )}
           </Link>
 
           {user ? (
@@ -246,7 +285,7 @@ const Navbar = () => {
                   </p>
                   <p className="text-xs text-gray-500">{user.email}</p>
                 </div>
-                
+
                 <Link
                   to="/profile"
                   onClick={closeMobileMenu}
@@ -255,7 +294,7 @@ const Navbar = () => {
                   <i className="fa-solid fa-user mr-3 text-gray-400"></i>
                   My Profile
                 </Link>
-                
+
                 <Link
                   to="/settings"
                   onClick={closeMobileMenu}
@@ -264,7 +303,7 @@ const Navbar = () => {
                   <i className="fa-solid fa-cog mr-3 text-gray-400"></i>
                   Settings
                 </Link>
-                
+
                 <button
                   onClick={handleLogout}
                   className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-gray-50 rounded-lg transition mt-2"
