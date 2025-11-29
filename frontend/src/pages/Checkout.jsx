@@ -9,18 +9,63 @@ const Checkout = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [hasSavedAddress, setHasSavedAddress] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fullName: "",
-    email: "",
     phone: "",
     address: "",
     city: "",
     state: "",
     zipCode: "",
-    paymentMethod: "cod"
+    paymentMethod: "cod",
+    country: "Nepal",
   });
+
+  const loadUser = async () => {
+    console.log("loadUser called");
+    try {
+      const res = await api.get("/users/");
+      console.log(" User API Response:", res.data);
+
+      let currentUser;
+
+      if (Array.isArray(res.data)) {
+        console.log("📋 Response is an array with", res.data.length, "users");
+        currentUser = res.data[0];
+      } else {
+        currentUser = res.data;
+      }
+
+      console.log("Current user:", currentUser);
+
+      // Since the API doesn't return ID, we'll use username as identifier
+      const username = currentUser?.username;
+      console.log("Username:", username);
+
+      if (!username) {
+        console.error("No username found");
+        return null;
+      }
+
+      setUserId(username); // Using username as userId
+      console.log("User identifier set to:", username);
+
+      const fullName =
+        `${currentUser.first_name} ${currentUser.last_name}`.trim() || username;
+      setFormData((prev) => ({
+        ...prev,
+        fullName: fullName,
+      }));
+
+      return username;
+    } catch (error) {
+      console.error("Could not load user:", error);
+      return null;
+    }
+  };
 
   const loadCart = async () => {
     try {
@@ -37,6 +82,107 @@ const Checkout = () => {
     }
   };
 
+  const loadAddress = async (currentUserIdentifier) => {
+    if (!currentUserIdentifier) {
+      console.log("No user identifier provided, skipping address load");
+      return;
+    }
+
+    console.log(
+      "🔍 Loading address for user identifier:",
+      currentUserIdentifier
+    );
+
+    try {
+      const res = await api.get("/address/");
+      console.log("Address API Response:", res.data);
+
+      const addressList = Array.isArray(res.data)
+        ? res.data
+        : res.data.results || [];
+
+      console.log("Address list length:", addressList.length);
+
+      addressList.forEach((addr, index) => {
+        console.log(`\n--- Address ${index} ---`);
+        console.log("Full address:", JSON.stringify(addr, null, 2));
+        console.log("User field:", addr.user);
+      });
+
+      const userAddress = addressList.find((addr) => {
+        if (addr.user === currentUserIdentifier) {
+          console.log("Matched by direct comparison");
+          return true;
+        }
+        if (String(addr.user) === String(currentUserIdentifier)) {
+          console.log("Matched by string comparison");
+          return true;
+        }
+        if (addr.user?.username === currentUserIdentifier) {
+          console.log("Matched by username");
+          return true;
+        }
+        if (addr.username === currentUserIdentifier) {
+          console.log(" Matched by address.username");
+          return true;
+        }
+        return false;
+      });
+
+      console.log("\n Final matched address:", userAddress);
+
+      if (userAddress) {
+        console.log("Address found! Setting form data...");
+        setHasSavedAddress(true);
+
+        const newFormData = {
+          fullName:
+            userAddress.full_name || userAddress.fullName || formData.fullName,
+          address:
+            userAddress.address_line || userAddress.address || formData.address,
+          phone:
+            userAddress.phone || userAddress.phone_number || formData.phone,
+          city: userAddress.city || formData.city,
+          state:
+            userAddress.state || userAddress.state_province || formData.state,
+          zipCode:
+            userAddress.zip_code ||
+            userAddress.zipCode ||
+            userAddress.postal_code ||
+            formData.zipCode,
+          paymentMethod: formData.paymentMethod,
+          country: formData.country,
+        };
+
+        console.log("Setting form data:", newFormData);
+        setFormData(newFormData);
+        console.log("Form data updated!");
+      } else {
+        console.log("No address found for user");
+        setHasSavedAddress(false);
+      }
+    } catch (error) {
+      console.error("Error loading address:", error);
+      setHasSavedAddress(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log("🎬 useEffect for user initialization triggered");
+    const initializeUser = async () => {
+      console.log("initializeUser function started");
+      const id = await loadUser();
+      console.log("📦 Received user ID from loadUser:", id);
+      if (id) {
+        console.log("User ID exists, calling loadAddress");
+        await loadAddress(id);
+      } else {
+        console.log("No user ID returned from loadUser");
+      }
+    };
+    initializeUser();
+  }, []);
+
   useEffect(() => {
     loadCart();
   }, []);
@@ -44,13 +190,13 @@ const Checkout = () => {
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    
+
     if (cart.length === 0) {
       toast.error("Your cart is empty");
       return;
@@ -64,22 +210,71 @@ const Checkout = () => {
     setProcessing(true);
 
     try {
-      const response = await api.post("/orders/place-order/");
-      
+      // Saving or updating address
+      if (hasSavedAddress) {
+        // If you have update endpoint, use it here
+        // await api.put(`/address/${userId}/`, {
+        //   full_name: formData.fullName,
+        //   phone: formData.phone,
+        //   address_line: formData.address,
+        //   city: formData.city,
+        //   state: formData.state,
+        //   country: "Nepal",
+        //   zip_code: formData.zipCode,
+        //   user: userId,
+        // });
+      } else {
+        await api.post("/address/", {
+          full_name: formData.fullName,
+          phone: formData.phone,
+          address_line: formData.address,
+          city: formData.city,
+          state: formData.state,
+          country: "Nepal",
+          zip_code: formData.zipCode,
+          user: userId,
+        });
+      }
+
+      const response = await api.post("/orders/place-order/", {
+        user: userId,
+        payment_method: formData.paymentMethod,
+        items: cart.map((item) => ({
+          product_id: item.product.id,
+          stock: item.stock,
+        })),
+      });
+
       if (response.status === 201) {
         toast.success("Order placed successfully!");
-        
+
         try {
-          await api.post("/orders/test_email/");
-        } catch (emailError) {
-          console.log("Email sending failed, but order was placed");
+          await api.delete("/cart/clear/");
+        } catch (clearError) {
+          console.log("Cart clear error:", clearError);
         }
-        
-        navigate("/orders");
+
+        navigate("/");
       }
     } catch (error) {
       console.error("Order error:", error);
-      toast.error(error.response?.data?.detail || "Failed to place order");
+
+      if (error.response?.data) {
+        const errorData = error.response.data;
+
+        if (
+          errorData.detail?.includes("stock") ||
+          errorData.detail?.includes("stock")
+        ) {
+          toast.error(errorData.detail);
+        } else if (errorData.out_of_stock) {
+          toast.error(`Sorry, ${errorData.product_name} is out of stock`);
+        } else {
+          toast.error(errorData.detail || "Failed to place order");
+        }
+      } else {
+        toast.error("Failed to place order. Please try again.");
+      }
     } finally {
       setProcessing(false);
     }
@@ -90,7 +285,7 @@ const Checkout = () => {
     0
   );
 
-  const shipping = totalPrice > 0 ? 50 : 0; 
+  const shipping = totalPrice > 0 ? 50 : 0;
   const finalTotal = totalPrice + shipping;
 
   if (loading) {
@@ -137,14 +332,21 @@ const Checkout = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Shipping Information
-              </h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Shipping Information
+                </h2>
+                {hasSavedAddress && (
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                    Saved Address
+                  </span>
+                )}
+              </div>
 
               <form onSubmit={handlePlaceOrder} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name *
+                    Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -159,21 +361,7 @@ const Checkout = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number *
+                      Phone Number <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
@@ -184,11 +372,23 @@ const Checkout = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      ZIP Code
+                    </label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      value={formData.zipCode}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Address *
+                    Address <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="address"
@@ -203,7 +403,7 @@ const Checkout = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City *
+                      City <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -214,32 +414,16 @@ const Checkout = () => {
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      State *
+                      Country
                     </label>
                     <input
                       type="text"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ZIP Code *
-                    </label>
-                    <input
-                      type="text"
-                      name="zipCode"
-                      value={formData.zipCode}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      required
+                      name="country"
+                      value="Nepal"
+                      disabled
+                      className="w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md"
                     />
                   </div>
                 </div>
@@ -301,7 +485,9 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}</span>
+                    <span>
+                      {shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}
+                    </span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-200 pt-2">
                     <span>Total</span>
