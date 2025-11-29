@@ -31,22 +31,21 @@ class OrderViewset(viewsets.ModelViewSet):
                 for item in cart.items.all():
                     product = item.product
                     
-                    # Check if product has a quantity field
-                    if hasattr(product, 'quantity'):
-                        if product.quantity < item.quantity:
-                            return Response({
-                                "detail": f"Sorry, only {product.quantity} units of '{product.name}' are available in stock",
-                                "out_of_stock": True,
-                                "product_name": product.name,
-                                "available_quantity": product.quantity,
-                                "requested_quantity": item.quantity
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                    # Check if product has enough stock
+                    if product.stock < item.quantity:
+                        return Response({
+                            "detail": f"Sorry, only {product.stock} units of '{product.name}' are available in stock",
+                            "out_of_stock": True,
+                            "product_name": product.name,
+                            "available_stock": product.stock,
+                            "requested_quantity": item.quantity
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 
                 # Create the order
                 order = Order.objects.create(user=request.user)
                 total_amount = 0
                 
-                # Create order items and reduce product quantities
+                # Create order items and reduce product stock
                 for item in cart.items.all():
                     # Create order item
                     OrderItem.objects.create(
@@ -59,10 +58,10 @@ class OrderViewset(viewsets.ModelViewSet):
                     # Calculate total
                     total_amount += item.quantity * item.product.price
                     
-                    # Reduce product quantity
-                    if hasattr(item.product, 'quantity'):
-                        item.product.quantity -= item.quantity
-                        item.product.save()
+                    # Reduce product stock
+                    product = item.product
+                    product.stock -= item.quantity
+                    product.save()
                 
                 # Save total amount
                 order.total_amount = total_amount
