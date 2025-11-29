@@ -29,6 +29,13 @@ class OrderAdminSerializer(serializers.ModelSerializer):
         fields= '__all__'
         
 class AddressAdminSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        source='user',
+        write_only=True
+    )
+
+    user = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Address
         fields = '__all__'
