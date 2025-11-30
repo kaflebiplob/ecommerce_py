@@ -132,7 +132,7 @@ const UserOrder = () => {
                         <div key={index} className="flex items-center gap-3">
                           {item.product?.image && (
                             <img
-                              src={`http://localhost:8000${item.product.image}`}
+                              src={`${import.meta.env.VITE_API_URL || "http://localhost:8000"}${item.product.image}`}
                               alt={item.product?.name}
                               className="w-12 h-12 object-cover rounded border"
                               onError={(e) => {

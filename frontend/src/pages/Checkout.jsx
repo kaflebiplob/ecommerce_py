@@ -459,7 +459,7 @@ const Checkout = () => {
                   {cart.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <img
-                        src={`http://localhost:8000${item.product.image}`}
+                       src={`${import.meta.env.VITE_API_URL || "http://localhost:8000"}${item.product.image}`}
                         alt={item.product.name}
                         className="w-16 h-16 object-cover rounded-lg border"
                       />
