@@ -18,17 +18,32 @@ const ProductDetail = () => {
   const [wishlistId, setWishlistId] = useState(null);
   const [rating, setRating] = useState(0);
 
+  const handleAddToCart = async () => {
+    try {
+      const response = await api.post("/cart/add/", {
+        product_id: product.id,
+        quantity: quantity,
+      });
+
+      toast.success("Added to cart");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add");
+    }
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await api.get(`products/${id}/`);
         setProduct(response.data);
+
         const reviewResponse = await api.get(`/reviews/?product_id=${id}`);
         if (reviewResponse.data?.length > 0) {
           setRating(reviewResponse.data[0].rating);
         }
 
-        // Fetch wishlist and match product
+        // fetch wishlist
         const wishlistRes = await api.get("/wishlist/");
         const foundItem = wishlistRes.data.find(
           (item) => item.product.id === parseInt(id)
@@ -36,7 +51,7 @@ const ProductDetail = () => {
 
         if (foundItem) {
           setWishlist(true);
-          setWishlistId(foundItem.id); // save wishlist item id
+          setWishlistId(foundItem.id);
         }
       } catch (error) {
         console.error("Failed to fetch product", error);
@@ -84,13 +99,11 @@ const ProductDetail = () => {
   const toggleWishlist = async () => {
     try {
       if (!wishlist) {
-        // ADD
         const res = await api.post("/wishlist/", { product_id: product.id });
         setWishlist(true);
-        setWishlistId(res.data.id); // store new wishlist_id
+        setWishlistId(res.data.id);
         toast.success("Added to wishlist");
       } else {
-        // REMOVE using wishlistId
         await api.delete(`/wishlist/${wishlistId}/`);
         setWishlist(false);
         setWishlistId(null);
@@ -175,26 +188,14 @@ const ProductDetail = () => {
             )}
 
             <div className="flex items-center gap-4 mt-6">
-              {!product.stock ? (
-                <button
-                  onClick={toggleWishlist}
-                  className="px-5 py-2 bg-white rounded-lg shadow flex items-center gap-2 hover:bg-gray-100"
-                >
-                  <FiHeart
-                    className={`text-xl ${
-                      wishlist ? "text-red-500 fill-red-500" : "text-gray-400"
-                    }`}
-                  />
-                  <span>Add to Wishlist</span>
-                </button>
-              ) : (
+              {product.stock > 0 && (
                 <>
-                  <Link
-                    to="/cart"
+                  <button
+                    onClick={handleAddToCart}
                     className="inline-block px-5 py-2 rounded text-white bg-black hover:bg-gray-800 transition"
                   >
                     Add to Cart
-                  </Link>
+                  </button>
 
                   <button
                     onClick={toggleWishlist}

@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../../api/api";
 import toast from "react-hot-toast";
 import { useSearch } from "../../context/SearchCOntext";
-import dummy from  "../../assets/dummy.png";
-
+import dummy from "../../assets/dummy.png";
 
 const AdminProduct = () => {
   const { globalSearch } = useSearch();
@@ -84,17 +83,17 @@ const AdminProduct = () => {
 
   return (
     <div className="p-6">
-           <div className="flex justify-between items-center mb-6">
-             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
-               Products
-             </h2>
-             <Link
-               to="/admin/product/create"
-               className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
-             >
-               + Add
-             </Link>
-           </div>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800">
+          Products
+        </h2>
+        <Link
+          to="/admin/product/create"
+          className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow hover:bg-emerald-700 transition"
+        >
+          + Add
+        </Link>
+      </div>
 
       <div className="rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
@@ -134,7 +133,7 @@ const AdminProduct = () => {
 
                     <td className="p-4 text-center flex justify-center">
                       <img
-                        src={p.image?? dummy}
+                        src={p.image ?? dummy}
                         alt="product"
                         className="w-14 h-14 object-cover rounded"
                       />
@@ -152,7 +151,7 @@ const AdminProduct = () => {
                         {p.is_featured ? "Yes" : "No"}
                       </span>
                     </td>
-                      <td className="p-4 text-center">
+                    <td className="p-4 text-center">
                       <span
                         className={`px-3 py-1 rounded-full text-white text-sm ${
                           p.status ? "bg-emerald-600" : "bg-gray-500"
