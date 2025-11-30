@@ -12,12 +12,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
+# ===========================
 # SECURITY
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
-DEBUG = False
+# ===========================
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = ["*"]
 
-# Installed apps
+# ===========================
+# INSTALLED APPS
+# ===========================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,7 +34,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
 
-    # Your apps
+    # Local apps
     'accounts',
     'products',
     'cart',
@@ -44,6 +48,9 @@ INSTALLED_APPS = [
     'adminpanel',
 ]
 
+# ===========================
+# MIDDLEWARE
+# ===========================
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -58,6 +65,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ecommerce.urls'
 
+# ===========================
+# TEMPLATES
+# ===========================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -75,10 +85,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-
-#  DATABASE (Render PostgreSQL)
+# ===========================
+# DATABASE (FROM ENV ONLY)
+# ===========================
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+if not DATABASE_URL:
+    raise ValueError("❌ DATABASE_URL is missing in environment variables!")
 
 DATABASES = {
     "default": dj_database_url.parse(
@@ -88,8 +101,9 @@ DATABASES = {
     )
 }
 
-
+# ===========================
 # PASSWORD VALIDATION
+# ===========================
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -97,23 +111,28 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
+# ===========================
 # INTERNATIONALIZATION
+# ===========================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-
+# ===========================
 # STATIC & MEDIA
+# ===========================
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / "media"
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# ===========================
 # REST FRAMEWORK (JWT)
+# ===========================
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -126,27 +145,26 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-
+# ===========================
 # EMAIL
+# ===========================
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-
-# CORS (React frontend)
+# ===========================
+# CORS / CSRF
+# ===========================
 CORS_ALLOWED_ORIGINS = [
     "https://ecommercepy.vercel.app",
-       "http://localhost:5173",
-    "http://localhost:3000",    
+    "http://localhost:5173",
+    "http://localhost:3000",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://ecommercepy.vercel.app",
-    "https://your-backend-service.onrender.com",
+    "https://*.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -159,3 +177,5 @@ CORS_ALLOW_HEADERS = [
     "cache-control",
     "x-requested-with",
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
