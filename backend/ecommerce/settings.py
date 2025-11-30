@@ -76,11 +76,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
-# ✅ DATABASE (Render PostgreSQL)
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://ecommerce_db_btgy_user:ynyJ0LT9xzUETVRH9KQaAnQchV2E3yGA@dpg-d4m68nndiees739s9t90-a.oregon-postgres.render.com/ecommerce_db_btgy"
-)
+#  DATABASE (Render PostgreSQL)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 
 DATABASES = {
     "default": dj_database_url.parse(
@@ -136,6 +134,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # CORS (React frontend)
 CORS_ALLOWED_ORIGINS = [
     "https://ecommercepy.vercel.app",
+       "http://localhost:5173",
+    "http://localhost:3000",    
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -147,3 +147,15 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "origin",
+    "user-agent",
+    "dnt",
+    "cache-control",
+    "x-requested-with",
+]
