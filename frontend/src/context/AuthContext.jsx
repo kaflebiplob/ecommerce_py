@@ -1,6 +1,6 @@
 // ============= AuthContext.jsx =============
 import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/api";  
 
 export const AuthContext = createContext();
 
@@ -12,13 +12,10 @@ export const AuthProvider = ({ children }) => {
 
   const [Loading, setLoading] = useState(false);
 
-  // Django backend API Url
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
   const register = async (username, email, password) => {
     try {
       setLoading(true);
-      const response = await axios.post(`${API_URL}/auth/register/`, {
+      const response = await api.post("/auth/register/", {
         username,
         email,
         password,
@@ -45,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       setLoading(true);
-      const response = await axios.post(`${API_URL}/auth/login/`, {
+      const response = await api.post("/auth/login/", {
         username,
         password,
       });
@@ -102,7 +99,7 @@ export const AuthProvider = ({ children }) => {
       const refresh = localStorage.getItem("refresh");
       if (refresh) {
         try {
-          const response = await axios.post(`${API_URL}/auth/token/refresh/`, {
+          await api.post("/auth/token/refresh/", {
             refresh,
           });
           localStorage.setItem("access", response.data.access);
