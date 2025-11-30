@@ -17,7 +17,23 @@ load_dotenv()
 # ===========================
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = ["*"]
+
+# Security settings for production
+if not DEBUG:
+    ALLOWED_HOSTS = [
+        "ecommerce-py-0rtu.onrender.com",
+        "ecommercepy.vercel.app",
+        "localhost",
+        "127.0.0.1",
+    ]
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+else:
+    ALLOWED_HOSTS = ["*"]
+    SECURE_SSL_REDIRECT = False
 
 # ===========================
 # INSTALLED APPS
@@ -137,12 +153,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
 }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=180),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
 }
 
 # ===========================
@@ -179,3 +200,50 @@ CORS_ALLOW_HEADERS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ===========================
+# AUTO CREATE ADMIN ON STARTUP (SAFE VERSION)
+# ===========================
+def create_admin_user():
+    """
+    Auto-create admin user when Django starts
+    This runs after all settings are loaded
+    """
+    try:
+        # Import here to avoid circular imports
+        from django.contrib.auth import get_user_model
+        from django.db.utils import OperationalError, ProgrammingError
+        
+        User = get_user_model()
+        
+        # Use environment variables with fallbacks
+        username = os.getenv('ADMIN_USERNAME', 'admin')
+        email = os.getenv('ADMIN_EMAIL', 'admin@ecommerce.com')
+        password = os.getenv('ADMIN_PASSWORD', 'admin123')
+        
+        # Check if admin user exists
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_superuser(
+                username=username,
+                email=email,
+                password=password  # Django automatically hashes this
+            )
+            print(f"✅ Auto-created admin user: {username} / {password}")
+        else:
+            print(f"ℹ️ Admin user '{username}' already exists")
+            
+    except (OperationalError, ProgrammingError):
+        # Database tables might not be created yet
+        print("⚠️ Database not ready yet, admin creation will be attempted on next startup")
+    except Exception as e:
+        print(f"⚠️ Error creating admin user: {e}")
+
+# Initialize Django properly before creating admin
+import django
+from django.conf import settings
+
+if not settings.configured:
+    django.setup()
+
+# Create admin user
+create_admin_user()
