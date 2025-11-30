@@ -84,7 +84,7 @@ const ContactForm = () => {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden mt-8">
         {showToast && (
           <div className="fixed top-4 right-4 z-50 animate-fade-in-down">

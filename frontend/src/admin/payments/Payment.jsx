@@ -122,9 +122,7 @@ const Payment = () => {
                       </span>
                     </td>
 
-                    <td className="p-4 text-center">
-                      {d.payment_id || "—"}
-                    </td>
+                    <td className="p-4 text-center">{d.payment_id || "—"}</td>
 
                     <td className="p-4 text-center">
                       {new Date(d.transaction_date).toLocaleString()}

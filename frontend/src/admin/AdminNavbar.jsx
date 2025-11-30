@@ -7,7 +7,7 @@ const AdminNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const {setGlobalSearch} = useSearch();
+  const { setGlobalSearch } = useSearch();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,7 +40,7 @@ const AdminNavbar = () => {
           type="text"
           placeholder="Search Products..."
           className="bg-transparent outline-none text-sm text-gray-700 w-full"
-          onChange={(e) => setGlobalSearch(e.target.value)} 
+          onChange={(e) => setGlobalSearch(e.target.value)}
         />
       </div>
 

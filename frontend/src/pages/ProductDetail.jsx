@@ -15,7 +15,7 @@ const ProductDetail = () => {
 
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
-  const [wishlistId, setWishlistId] = useState(null); 
+  const [wishlistId, setWishlistId] = useState(null);
   const [rating, setRating] = useState(0);
 
   useEffect(() => {
@@ -38,7 +38,6 @@ const ProductDetail = () => {
           setWishlist(true);
           setWishlistId(foundItem.id); // save wishlist item id
         }
-
       } catch (error) {
         console.error("Failed to fetch product", error);
       } finally {
@@ -108,7 +107,6 @@ const ProductDetail = () => {
 
       <div className="bg-gray-50 py-16 px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          
           <div className="flex justify-center">
             <img
               src={product.image || dummyImage}
@@ -220,7 +218,6 @@ const ProductDetail = () => {
                 ← Back to Products
               </Link>
             </div>
-
           </div>
         </div>
       </div>

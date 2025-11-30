@@ -77,24 +77,18 @@ const Profile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await api.put(
-        `/users/${formData.id}/`,
-        {
-          username: formData.username,
-          email: formData.email,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-        }
-        
-      );
-      
+      const response = await api.put(`/users/${formData.id}/`, {
+        username: formData.username,
+        email: formData.email,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+      });
 
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error.response || error);
       alert("Failed to update profile");
-      
     }
   };
 

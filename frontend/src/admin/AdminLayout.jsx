@@ -29,7 +29,7 @@ const AdminLayout = () => {
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
-           {/* <li>
+          {/* <li>
             <Link onClick={() => setOpen(false)} to="/admin">
               Dashboard
             </Link>
@@ -44,7 +44,7 @@ const AdminLayout = () => {
               Products
             </Link>
           </li>
-           <li>
+          <li>
             <Link onClick={() => setOpen(false)} to="/admin/categories">
               Category
             </Link>
@@ -68,7 +68,8 @@ const AdminLayout = () => {
             <Link onClick={() => setOpen(false)} to="/admin/user-address">
               Address
             </Link>
-          </li> <li>
+          </li>{" "}
+          <li>
             <Link onClick={() => setOpen(false)} to="/admin/wishlists">
               WishList
             </Link>
@@ -92,12 +93,12 @@ const AdminLayout = () => {
         </h2>
 
         <ul className="mt-6 space-y-4 text-gray-300">
-           {/* <li>
+          {/* <li>
             <Link to="dashboard" className="block hover:text-white">
               Dashboard
             </Link>
           </li> */}
-           <li>
+          <li>
             <Link to="users" className="block hover:text-white">
               Users
             </Link>
@@ -107,7 +108,7 @@ const AdminLayout = () => {
               Products
             </Link>
           </li>
-            <li>
+          <li>
             <Link to="categories" className="block hover:text-white">
               Category
             </Link>

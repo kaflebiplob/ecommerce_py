@@ -276,7 +276,6 @@ const Navbar = () => {
               ))}
             </ul>
 
-            {/* User Section in Mobile Menu */}
             {user && (
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="px-4 mb-4">

@@ -48,7 +48,7 @@ const Wishlist = () => {
   //       </div>
   //     </>
   //   );
- 
+
   // }
   return (
     <>

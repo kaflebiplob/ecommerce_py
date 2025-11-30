@@ -17,7 +17,7 @@ const UserOrder = () => {
   const fetchOrders = async () => {
     try {
       const response = await api.get("/orders/");
-      console.log("Orders data:", response.data); 
+      console.log("Orders data:", response.data);
       setOrders(response.data.results || response.data || []);
     } catch (error) {
       if (error.response?.status === 401) {
@@ -60,7 +60,9 @@ const UserOrder = () => {
 
       <div className="container mx-auto px-4 py-8  min-h-[60vh]">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 text-center">My Orders</h1>
+          <h1 className="text-2xl font-bold text-gray-900 text-center">
+            My Orders
+          </h1>
         </div>
 
         {orders.length === 0 ? (
@@ -90,7 +92,9 @@ const UserOrder = () => {
                 <div className="p-4 border-b border-gray-200">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-sm text-gray-600">Order ID: #{order.id}</p>
+                      <p className="text-sm text-gray-600">
+                        Order ID: #{order.id}
+                      </p>
                       <p className="text-sm text-gray-600">
                         Date: {formatDate(order.created_at)}
                       </p>
@@ -103,13 +107,18 @@ const UserOrder = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                      order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                      order.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {order.status || 'pending'}
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        order.status === "delivered"
+                          ? "bg-green-100 text-green-800"
+                          : order.status === "cancelled"
+                          ? "bg-red-100 text-red-800"
+                          : order.status === "completed"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}
+                    >
+                      {order.status || "pending"}
                     </span>
                   </div>
                 </div>
@@ -127,26 +136,33 @@ const UserOrder = () => {
                               alt={item.product?.name}
                               className="w-12 h-12 object-cover rounded border"
                               onError={(e) => {
-                                e.target.style.display = 'none';
+                                e.target.style.display = "none";
                               }}
                             />
                           )}
                           <div className="flex-1">
                             <p className="font-medium text-gray-900">
-                              {item.product?.name || 'Product'}
+                              {item.product?.name || "Product"}
                             </p>
                             <p className="text-sm text-gray-600">
-                              Quantity: {item.quantity} × ₹{item.price || item.product?.price}
+                              Quantity: {item.quantity} × ₹
+                              {item.price || item.product?.price}
                             </p>
                             <p className="text-sm font-semibold">
-                              Subtotal: ₹{(item.quantity * (item.price || item.product?.price || 0)).toFixed(2)}
+                              Subtotal: ₹
+                              {(
+                                item.quantity *
+                                (item.price || item.product?.price || 0)
+                              ).toFixed(2)}
                             </p>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-500 text-sm">No items found in this order</p>
+                    <p className="text-gray-500 text-sm">
+                      No items found in this order
+                    </p>
                   )}
                 </div>
               </div>

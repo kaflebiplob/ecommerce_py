@@ -52,9 +52,14 @@ export const AuthProvider = ({ children }) => {
 
       if (response.data?.access) {
         const userData = {
-          username: response.data.user?.username || response.data.username || username,
-          is_staff: response.data.user?.is_staff || response.data.is_staff || false,
-          is_superuser: response.data.user?.is_superuser || response.data.is_superuser || false,
+          username:
+            response.data.user?.username || response.data.username || username,
+          is_staff:
+            response.data.user?.is_staff || response.data.is_staff || false,
+          is_superuser:
+            response.data.user?.is_superuser ||
+            response.data.is_superuser ||
+            false,
           email: response.data.user?.email || response.data.email || "",
           id: response.data.user?.id || response.data.id || null,
         };

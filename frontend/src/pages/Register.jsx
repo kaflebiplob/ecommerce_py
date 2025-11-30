@@ -9,7 +9,7 @@ const Register = () => {
     email: "",
     password: "",
   });
-  const [message, setMessage]= useState("");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -21,19 +21,22 @@ const Register = () => {
     e.preventDefault();
     try {
       if (!formData.username || !formData.password || !formData.email) {
-      setError(" Please fill out required fields.");
-      return;
-    }
-     const result =  await register(formData.username, formData.email, formData.password);
-     if (result.success){
-      setMessage(" Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
-     }else{
-      setError(` ${result.message}`);
-
-     }
+        setError(" Please fill out required fields.");
+        return;
+      }
+      const result = await register(
+        formData.username,
+        formData.email,
+        formData.password
+      );
+      if (result.success) {
+        setMessage(" Registration successful! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        setError(` ${result.message}`);
+      }
     } catch (err) {
-      setError("Registration failed. Please check your details.",err);
+      setError("Registration failed. Please check your details.", err);
     }
   };
 
@@ -46,13 +49,15 @@ const Register = () => {
         {message && (
           <p className="text-green-600 text-center mb-4 text-sm">{message}</p>
         )}
-        {error && <p className="text-red-500 text-center mb-4 text-sm">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-center mb-4 text-sm">{error}</p>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Username
-            <span className="text-red-600">*</span>
+              <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -76,7 +81,6 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-              
             />
           </div>
 
@@ -92,7 +96,6 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-              
             />
           </div>
 

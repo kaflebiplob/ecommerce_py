@@ -62,7 +62,7 @@ function App() {
         <Route path="/403" element={<Forbidden />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/my-orders" element={<UserOrder />}/>
+        <Route path="/my-orders" element={<UserOrder />} />
 
         <Route
           path="/admin"

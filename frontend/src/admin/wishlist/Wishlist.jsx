@@ -114,9 +114,7 @@ const Wishlist = () => {
                       {item.product_name || "—"}
                     </td>
 
-                    <td className="p-4 text-center">
-                      {item.username || "—"}
-                    </td>
+                    <td className="p-4 text-center">{item.username || "—"}</td>
 
                     <td className="p-4 text-center">
                       {item.added_at?.split("T")[0]}

@@ -172,7 +172,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
-      
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {statCards.map((stat, index) => (
@@ -195,14 +194,18 @@ const AdminDashboard = () => {
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Monthly Orders - Large Chart */}
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm lg:col-span-2">
           <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Monthly Orders
           </h3>
           <div className="h-64 sm:h-80">
-            {salesChart && <Line data={salesChart} options={{ maintainAspectRatio: false }} />}
+            {salesChart && (
+              <Line
+                data={salesChart}
+                options={{ maintainAspectRatio: false }}
+              />
+            )}
           </div>
         </div>
 
@@ -213,7 +216,10 @@ const AdminDashboard = () => {
           </h3>
           <div className="h-64">
             {orderStatusChart ? (
-              <Pie data={orderStatusChart} options={{ maintainAspectRatio: false }} />
+              <Pie
+                data={orderStatusChart}
+                options={{ maintainAspectRatio: false }}
+              />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
                 No Data Available
@@ -228,7 +234,9 @@ const AdminDashboard = () => {
             New Users per Month
           </h3>
           <div className="h-64 sm:h-80">
-            {userChart && <Line data={userChart} options={{ maintainAspectRatio: false }} />}
+            {userChart && (
+              <Line data={userChart} options={{ maintainAspectRatio: false }} />
+            )}
           </div>
         </div>
 
@@ -238,7 +246,9 @@ const AdminDashboard = () => {
             Orders & Users Comparison
           </h3>
           <div className="h-64 sm:h-80">
-            {barChart && <Bar data={barChart} options={{ maintainAspectRatio: false }} />}
+            {barChart && (
+              <Bar data={barChart} options={{ maintainAspectRatio: false }} />
+            )}
           </div>
         </div>
       </div>
@@ -257,15 +267,25 @@ const AdminDashboard = () => {
             recentOrders.map((order) => (
               <div key={order.id} className="p-4 border-b border-gray-200">
                 <div className="flex justify-between items-start mb-2">
-                  <span className="font-semibold text-gray-800">#{order.id}</span>
+                  <span className="font-semibold text-gray-800">
+                    #{order.id}
+                  </span>
                   <span className="px-2 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded">
                     {order.status}
                   </span>
                 </div>
                 <div className="space-y-1 text-sm text-gray-600">
-                  <p><span className="font-medium">User:</span> {order.user}</p>
-                  <p><span className="font-medium">Amount:</span> ${order.total_amount}</p>
-                  <p><span className="font-medium">Date:</span> {new Date(order.created_at).toLocaleDateString()}</p>
+                  <p>
+                    <span className="font-medium">User:</span> {order.user}
+                  </p>
+                  <p>
+                    <span className="font-medium">Amount:</span> $
+                    {order.total_amount}
+                  </p>
+                  <p>
+                    <span className="font-medium">Date:</span>{" "}
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
             ))
@@ -301,7 +321,10 @@ const AdminDashboard = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {recentOrders.length > 0 ? (
                 recentOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={order.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       #{order.id}
                     </td>
@@ -323,7 +346,10 @@ const AdminDashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                  <td
+                    colSpan="5"
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
                     No recent orders
                   </td>
                 </tr>

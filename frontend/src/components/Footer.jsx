@@ -34,7 +34,9 @@ const Footer = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-white mb-4">Stay Updated</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">
+            Stay Updated
+          </h2>
           <p className="text-sm mb-3 text-gray-400">
             Subscribe to get the latest deals and updates.
           </p>
