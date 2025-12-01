@@ -12,9 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-# ===========================
-# SECURITY
-# ===========================
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
@@ -35,9 +32,6 @@ else:
     ALLOWED_HOSTS = ["*"]
     SECURE_SSL_REDIRECT = False
 
-# ===========================
-# INSTALLED APPS
-# ===========================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,12 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Third-party
     'corsheaders',
     'rest_framework',
 
-    # Local apps
-    'accounts',
+    'accounts.apps.AccountsConfig',
+    # 'accounts',
     'products',
     'cart',
     'orders',
@@ -64,9 +57,6 @@ INSTALLED_APPS = [
     'adminpanel',
 ]
 
-# ===========================
-# MIDDLEWARE
-# ===========================
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -81,9 +71,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ecommerce.urls'
 
-# ===========================
-# TEMPLATES
-# ===========================
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -101,13 +89,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-# ===========================
-# DATABASE (FROM ENV ONLY)
-# ===========================
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ValueError("❌ DATABASE_URL is missing in environment variables!")
+    raise ValueError(" DATABASE_URL is missing in environment variables!")
 
 DATABASES = {
     "default": dj_database_url.parse(
@@ -117,9 +102,6 @@ DATABASES = {
     )
 }
 
-# ===========================
-# PASSWORD VALIDATION
-# ===========================
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -127,17 +109,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# ===========================
-# INTERNATIONALIZATION
-# ===========================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ===========================
-# STATIC & MEDIA
-# ===========================
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -146,9 +122,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# ===========================
-# REST FRAMEWORK (JWT)
-# ===========================
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -165,15 +138,8 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
-
-# ===========================
-# EMAIL
-# ===========================
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# ===========================
-# CORS / CSRF
-# ===========================
 CORS_ALLOWED_ORIGINS = [
     "https://ecommercepy.vercel.app",
     "http://localhost:5173",
@@ -201,49 +167,3 @@ CORS_ALLOW_HEADERS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ===========================
-# AUTO CREATE ADMIN ON STARTUP (SAFE VERSION)
-# ===========================
-def create_admin_user():
-    """
-    Auto-create admin user when Django starts
-    This runs after all settings are loaded
-    """
-    try:
-        # Import here to avoid circular imports
-        from django.contrib.auth import get_user_model
-        from django.db.utils import OperationalError, ProgrammingError
-        
-        User = get_user_model()
-        
-        # Use environment variables with fallbacks
-        username = os.getenv('ADMIN_USERNAME', 'admin')
-        email = os.getenv('ADMIN_EMAIL', 'admin@ecommerce.com')
-        password = os.getenv('ADMIN_PASSWORD', 'admin123')
-        
-        # Check if admin user exists
-        if not User.objects.filter(username=username).exists():
-            User.objects.create_superuser(
-                username=username,
-                email=email,
-                password=password  # Django automatically hashes this
-            )
-            print(f"✅ Auto-created admin user: {username} / {password}")
-        else:
-            print(f"ℹ️ Admin user '{username}' already exists")
-            
-    except (OperationalError, ProgrammingError):
-        # Database tables might not be created yet
-        print("⚠️ Database not ready yet, admin creation will be attempted on next startup")
-    except Exception as e:
-        print(f"⚠️ Error creating admin user: {e}")
-
-# Initialize Django properly before creating admin
-import django
-from django.conf import settings
-
-if not settings.configured:
-    django.setup()
-
-# Create admin user
-create_admin_user()
