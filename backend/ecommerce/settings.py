@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'cloudinary',
+    'cloudinary_storage',
 
     'accounts.apps.AccountsConfig',
     # 'accounts',
