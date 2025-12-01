@@ -7,6 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields= '__all__'
         
 class ProductSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source='category', write_only=True)
