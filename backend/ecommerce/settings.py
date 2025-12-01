@@ -3,6 +3,9 @@ Django settings for ecommerce project.
 """
 
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -11,6 +14,11 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
