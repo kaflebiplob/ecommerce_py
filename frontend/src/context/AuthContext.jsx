@@ -1,4 +1,3 @@
-// ============= AuthContext.jsx =============
 import { createContext, useState, useEffect } from "react";
 import api from "../api/api";  
 
@@ -99,10 +98,10 @@ export const AuthProvider = ({ children }) => {
       const refresh = localStorage.getItem("refresh");
       if (refresh) {
         try {
-          await api.post("/auth/token/refresh/", {
+          const res =await api.post("/auth/token/refresh/", {
             refresh,
           });
-          localStorage.setItem("access", response.data.access);
+          localStorage.setItem("access", res.data.access);
         } catch (error) {
           console.error("Token refresh failed", error);
           logout();
