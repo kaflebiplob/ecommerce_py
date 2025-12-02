@@ -53,7 +53,7 @@ const Home = () => {
     (p) => p.is_featured === true && p.status === true
   );
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <>
